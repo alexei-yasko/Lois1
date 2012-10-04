@@ -1,8 +1,7 @@
-grammar logicLanguage;
+grammar LogicLanguage;
 
 options {
     language=Java;
-    output=AST;
 }
 
 
@@ -13,6 +12,50 @@ options {
 @lexer::header {
     package lois.lab1.parser.output;
 }
+
+@members {
+
+	private static List<String> errorList = new ArrayList<String>();
+	
+	private int errorLine; 
+
+    public static void main(String[] args) throws Exception {
+    	
+		//String codeFile = args[0];
+    	String baseFile = "knowledgeBase/knowledgeBase.txt";
+    	//String goalFile = args[1];
+    	String goalFile = "knowledgeBase/goal.txt";
+
+		//CharStream input = new ANTLRFileStream(args[0]);
+		LogicLanguageLexer lexer = new LogicLanguageLexer(new ANTLRFileStream(baseFile));
+        LogicLanguageParser parser = new LogicLanguageParser(new CommonTokenStream(lexer));
+        parser.base();
+        
+        lexer = new LogicLanguageLexer(new ANTLRFileStream(goalFile));
+        parser = new LogicLanguageParser(new CommonTokenStream(lexer));
+        parser.goal();
+        
+        if (!errorList.isEmpty()) {
+        	System.out.println("Next errors was found: ");
+            
+            for (String error : errorList) {
+            	System.out.println(error);
+            }
+        } else {
+            System.out.println("Success!");
+       	}
+   	}
+
+    public String getErrorHeader(RecognitionException e) {
+        errorLine = e.line;
+        return "";
+    }
+
+    public void emitErrorMessage(String message) {
+        errorList.add("line " + errorLine + ": " + message);
+    }
+}
+
 
 base
 	: factList ruleList?
