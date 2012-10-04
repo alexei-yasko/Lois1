@@ -5,7 +5,15 @@ package lois.lab1.datastructure;
  */
 public abstract class AtomSign {
 
-	protected String sign;
+	private String sign;
 
 	public abstract AtomSignType getType();
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 }

@@ -8,5 +8,5 @@ import java.util.List;
  */
 public class Goal {
 
-    private List<Predicat> goalTermList = new ArrayList<Predicat>();
+    private List<Predicate> goalTermList = new ArrayList<Predicate>();
 }

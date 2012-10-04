@@ -5,6 +5,10 @@ package lois.lab1.datastructure;
  */
 public class Constant extends AtomSign {
 
+    public Constant(String sign) {
+        setSign(sign);
+    }
+
 	@Override
 	public AtomSignType getType() {
 		return AtomSignType.CONST;

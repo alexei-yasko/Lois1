@@ -6,6 +6,6 @@ package lois.lab1.datastructure;
 enum AtomSignType {
 	CONST,
 	VAR,
-	PREDICAT,
+    PREDICATE,
     SIMILARITY
 }
