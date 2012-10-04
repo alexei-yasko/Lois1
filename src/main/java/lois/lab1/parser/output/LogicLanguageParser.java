@@ -1,6 +1,15 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g 2012-10-04 08:01:20
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g 2012-10-04 10:31:31
 
-    package lois.lab1.parser.output;
+    package lois.lab1.parser.output;    
+	
+	import lois.lab1.datastructure.Variable;
+	import lois.lab1.datastructure.Constant;
+	import lois.lab1.datastructure.AtomSign;
+	import lois.lab1.datastructure.Predicate;
+	import lois.lab1.datastructure.Rule;
+	import lois.lab1.datastructure.SimilarityRelation;
+	import lois.lab1.datastructure.Goal;
+	import lois.lab1.datastructure.KnowledgeBase;
 
 
 import org.antlr.runtime.*;
@@ -10,7 +19,7 @@ import java.util.ArrayList;
 
 public class LogicLanguageParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "LOWER_SYMBOL", "UPPER_SYMBOL", "COMMENT", "WS", "'.'", "'('", "','", "')'", "'<-'", "';'", "'?'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "LOWER_SYMBOL", "UPPER_SYMBOL", "COMMENT", "WS", "'<-'", "'.'", "'('", "','", "')'", "';'", "'?'"
     };
     public static final int WS=7;
     public static final int T__12=12;
@@ -45,7 +54,9 @@ public class LogicLanguageParser extends Parser {
 
     	private static List<String> errorList = new ArrayList<String>();
     	
-    	private int errorLine; 
+    	private int errorLine;
+    	
+    	private static Goal goal;
 
         public static void main(String[] args) throws Exception {
         	
@@ -71,6 +82,7 @@ public class LogicLanguageParser extends Parser {
                 }
             } else {
                 System.out.println("Success!");
+                System.out.println(KnowledgeBase.getInstance().toString());
            	}
        	}
 
@@ -86,18 +98,18 @@ public class LogicLanguageParser extends Parser {
 
 
     // $ANTLR start "base"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:60:1: base : factList ( ruleList )? ;
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:72:1: base : factList ( ruleList )? ;
     public final void base() throws RecognitionException {
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:61:2: ( factList ( ruleList )? )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:61:4: factList ( ruleList )?
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:2: ( factList ( ruleList )? )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:4: factList ( ruleList )?
             {
             pushFollow(FOLLOW_factList_in_base48);
             factList();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:61:13: ( ruleList )?
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:13: ( ruleList )?
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -106,7 +118,7 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt1) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:61:13: ruleList
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:13: ruleList
                     {
                     pushFollow(FOLLOW_ruleList_in_base50);
                     ruleList();
@@ -135,25 +147,25 @@ public class LogicLanguageParser extends Parser {
 
 
     // $ANTLR start "factList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:64:1: factList : fact ( fact )* ;
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:76:1: factList : fact ( fact )* ;
     public final void factList() throws RecognitionException {
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:65:2: ( fact ( fact )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:65:4: fact ( fact )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:2: ( fact ( fact )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:4: fact ( fact )*
             {
             pushFollow(FOLLOW_fact_in_factList63);
             fact();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:65:9: ( fact )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:9: ( fact )*
             loop2:
             do {
                 int alt2=2;
                 alt2 = dfa2.predict(input);
                 switch (alt2) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:65:9: fact
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:9: fact
             	    {
             	    pushFollow(FOLLOW_fact_in_factList65);
             	    fact();
@@ -185,18 +197,24 @@ public class LogicLanguageParser extends Parser {
 
 
     // $ANTLR start "ruleList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:68:1: ruleList : rule ( rule )* ;
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:80:1: ruleList : first= rule (second= rule )* ;
     public final void ruleList() throws RecognitionException {
+        Rule first = null;
+
+        Rule second = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:69:2: ( rule ( rule )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:69:4: rule ( rule )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:81:2: (first= rule (second= rule )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:81:4: first= rule (second= rule )*
             {
-            pushFollow(FOLLOW_rule_in_ruleList78);
-            rule();
+            pushFollow(FOLLOW_rule_in_ruleList80);
+            first=rule();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:69:9: ( rule )*
+             KnowledgeBase.getInstance().addRule(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:83:2: (second= rule )*
             loop3:
             do {
                 int alt3=2;
@@ -209,13 +227,14 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt3) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:69:9: rule
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:83:3: second= rule
             	    {
-            	    pushFollow(FOLLOW_rule_in_ruleList80);
-            	    rule();
+            	    pushFollow(FOLLOW_rule_in_ruleList92);
+            	    second=rule();
 
             	    state._fsp--;
 
+            	     KnowledgeBase.getInstance().addRule(second); 
 
             	    }
             	    break;
@@ -240,11 +259,60 @@ public class LogicLanguageParser extends Parser {
     // $ANTLR end "ruleList"
 
 
-    // $ANTLR start "fact"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:72:1: fact : ( predicateFact | similarityRelation );
-    public final void fact() throws RecognitionException {
+    // $ANTLR start "rule"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:86:1: rule returns [Rule object] : predicateTerm '<-' predicateTermList '.' ;
+    public final Rule rule() throws RecognitionException {
+        Rule object = null;
+
+        Predicate predicateTerm1 = null;
+
+        List<Predicate> predicateTermList2 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:2: ( predicateFact | similarityRelation )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:87:2: ( predicateTerm '<-' predicateTermList '.' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:87:4: predicateTerm '<-' predicateTermList '.'
+            {
+            pushFollow(FOLLOW_predicateTerm_in_rule112);
+            predicateTerm1=predicateTerm();
+
+            state._fsp--;
+
+            match(input,8,FOLLOW_8_in_rule114); 
+            pushFollow(FOLLOW_predicateTermList_in_rule116);
+            predicateTermList2=predicateTermList();
+
+            state._fsp--;
+
+            match(input,9,FOLLOW_9_in_rule118); 
+             object = new Rule(predicateTerm1, predicateTermList2); 
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return object;
+    }
+    // $ANTLR end "rule"
+
+
+    // $ANTLR start "fact"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:90:1: fact returns [Predicate object] : ( predicateFact | similarityRelation );
+    public final Predicate fact() throws RecognitionException {
+        Predicate object = null;
+
+        Predicate predicateFact3 = null;
+
+        SimilarityRelation similarityRelation4 = null;
+
+
+        try {
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:91:2: ( predicateFact | similarityRelation )
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -262,24 +330,26 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt4) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:4: predicateFact
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:91:4: predicateFact
                     {
-                    pushFollow(FOLLOW_predicateFact_in_fact93);
-                    predicateFact();
+                    pushFollow(FOLLOW_predicateFact_in_fact135);
+                    predicateFact3=predicateFact();
 
                     state._fsp--;
 
+                     KnowledgeBase.getInstance().addPredicate(predicateFact3); 
 
                     }
                     break;
                 case 2 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:73:20: similarityRelation
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:92:4: similarityRelation
                     {
-                    pushFollow(FOLLOW_similarityRelation_in_fact97);
-                    similarityRelation();
+                    pushFollow(FOLLOW_similarityRelation_in_fact142);
+                    similarityRelation4=similarityRelation();
 
                     state._fsp--;
 
+                     KnowledgeBase.getInstance().addSimilarityRelation(similarityRelation4); 
 
                     }
                     break;
@@ -292,29 +362,37 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "fact"
 
 
     // $ANTLR start "similarityRelation"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:76:1: similarityRelation : similarityName similarityNamePair '.' ;
-    public final void similarityRelation() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:95:1: similarityRelation returns [SimilarityRelation object] : similarityName similarityPair '.' ;
+    public final SimilarityRelation similarityRelation() throws RecognitionException {
+        SimilarityRelation object = null;
+
+        String similarityName5 = null;
+
+        LogicLanguageParser.similarityPair_return similarityPair6 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:2: ( similarityName similarityNamePair '.' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:77:4: similarityName similarityNamePair '.'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:96:2: ( similarityName similarityPair '.' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:96:4: similarityName similarityPair '.'
             {
-            pushFollow(FOLLOW_similarityName_in_similarityRelation109);
-            similarityName();
+            pushFollow(FOLLOW_similarityName_in_similarityRelation160);
+            similarityName5=similarityName();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_similarityNamePair_in_similarityRelation111);
-            similarityNamePair();
+            pushFollow(FOLLOW_similarityPair_in_similarityRelation162);
+            similarityPair6=similarityPair();
 
             state._fsp--;
 
-            match(input,8,FOLLOW_8_in_similarityRelation113); 
+            match(input,9,FOLLOW_9_in_similarityRelation164); 
+             object = new SimilarityRelation(similarityName5, (similarityPair6!=null?similarityPair6.firstObject:null), (similarityPair6!=null?similarityPair6.secondObject:null)); 
 
             }
 
@@ -325,20 +403,32 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "similarityRelation"
 
+    public static class similarityPair_return extends ParserRuleReturnScope {
+        public AtomSign firstObject;
+        public AtomSign secondObject;
+    };
 
-    // $ANTLR start "similarityNamePair"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:80:1: similarityNamePair : ( predicateNamePair | constNamePair );
-    public final void similarityNamePair() throws RecognitionException {
+    // $ANTLR start "similarityPair"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:100:1: similarityPair returns [AtomSign firstObject, AtomSign secondObject] : ( predicateNamePair | constantPair );
+    public final LogicLanguageParser.similarityPair_return similarityPair() throws RecognitionException {
+        LogicLanguageParser.similarityPair_return retval = new LogicLanguageParser.similarityPair_return();
+        retval.start = input.LT(1);
+
+        LogicLanguageParser.predicateNamePair_return predicateNamePair7 = null;
+
+        LogicLanguageParser.constantPair_return constantPair8 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:81:2: ( predicateNamePair | constNamePair )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:101:2: ( predicateNamePair | constantPair )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
-            if ( (LA5_0==9) ) {
+            if ( (LA5_0==10) ) {
                 int LA5_1 = input.LA(2);
 
                 if ( (LA5_1==LOWER_SYMBOL) ) {
@@ -362,29 +452,36 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt5) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:81:4: predicateNamePair
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:101:4: predicateNamePair
                     {
-                    pushFollow(FOLLOW_predicateNamePair_in_similarityNamePair125);
-                    predicateNamePair();
+                    pushFollow(FOLLOW_predicateNamePair_in_similarityPair184);
+                    predicateNamePair7=predicateNamePair();
 
                     state._fsp--;
 
+                     
+                    		retval.firstObject = new Predicate((predicateNamePair7!=null?predicateNamePair7.firstName:null)); 
+                    		retval.secondObject = new Predicate((predicateNamePair7!=null?predicateNamePair7.secondName:null));
+                    	
 
                     }
                     break;
                 case 2 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:81:24: constNamePair
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:106:4: constantPair
                     {
-                    pushFollow(FOLLOW_constNamePair_in_similarityNamePair129);
-                    constNamePair();
+                    pushFollow(FOLLOW_constantPair_in_similarityPair194);
+                    constantPair8=constantPair();
 
                     state._fsp--;
 
+                     retval.firstObject = (constantPair8!=null?constantPair8.firstObject:null); retval.secondObject = (constantPair8!=null?constantPair8.secondObject:null); 
 
                     }
                     break;
 
             }
+            retval.stop = input.LT(-1);
+
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -392,34 +489,49 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return retval;
     }
-    // $ANTLR end "similarityNamePair"
+    // $ANTLR end "similarityPair"
 
+    public static class predicateNamePair_return extends ParserRuleReturnScope {
+        public String firstName;
+        public String secondName;
+    };
 
     // $ANTLR start "predicateNamePair"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:84:1: predicateNamePair : '(' predicateName ',' predicateName ')' ;
-    public final void predicateNamePair() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:109:1: predicateNamePair returns [String firstName, String secondName] : '(' first= predicateName ',' second= predicateName ')' ;
+    public final LogicLanguageParser.predicateNamePair_return predicateNamePair() throws RecognitionException {
+        LogicLanguageParser.predicateNamePair_return retval = new LogicLanguageParser.predicateNamePair_return();
+        retval.start = input.LT(1);
+
+        String first = null;
+
+        String second = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:85:2: ( '(' predicateName ',' predicateName ')' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:85:4: '(' predicateName ',' predicateName ')'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:2: ( '(' first= predicateName ',' second= predicateName ')' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:4: '(' first= predicateName ',' second= predicateName ')'
             {
-            match(input,9,FOLLOW_9_in_predicateNamePair141); 
-            pushFollow(FOLLOW_predicateName_in_predicateNamePair143);
-            predicateName();
+            match(input,10,FOLLOW_10_in_predicateNamePair212); 
+            pushFollow(FOLLOW_predicateName_in_predicateNamePair216);
+            first=predicateName();
 
             state._fsp--;
 
-            match(input,10,FOLLOW_10_in_predicateNamePair145); 
-            pushFollow(FOLLOW_predicateName_in_predicateNamePair147);
-            predicateName();
+            match(input,11,FOLLOW_11_in_predicateNamePair218); 
+            pushFollow(FOLLOW_predicateName_in_predicateNamePair222);
+            second=predicateName();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_predicateNamePair149); 
+            match(input,12,FOLLOW_12_in_predicateNamePair224); 
+             retval.firstName = first; retval.secondName = second; 
 
             }
 
+            retval.stop = input.LT(-1);
+
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -427,33 +539,48 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return retval;
     }
     // $ANTLR end "predicateNamePair"
 
+    public static class constantPair_return extends ParserRuleReturnScope {
+        public Constant firstObject;
+        public Constant secondObject;
+    };
 
-    // $ANTLR start "constNamePair"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:88:1: constNamePair : '(' constant ',' constant ')' ;
-    public final void constNamePair() throws RecognitionException {
+    // $ANTLR start "constantPair"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:113:1: constantPair returns [Constant firstObject, Constant secondObject] : '(' first= constant ',' second= constant ')' ;
+    public final LogicLanguageParser.constantPair_return constantPair() throws RecognitionException {
+        LogicLanguageParser.constantPair_return retval = new LogicLanguageParser.constantPair_return();
+        retval.start = input.LT(1);
+
+        Constant first = null;
+
+        Constant second = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:89:2: ( '(' constant ',' constant ')' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:89:4: '(' constant ',' constant ')'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:2: ( '(' first= constant ',' second= constant ')' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:4: '(' first= constant ',' second= constant ')'
             {
-            match(input,9,FOLLOW_9_in_constNamePair161); 
-            pushFollow(FOLLOW_constant_in_constNamePair163);
-            constant();
+            match(input,10,FOLLOW_10_in_constantPair242); 
+            pushFollow(FOLLOW_constant_in_constantPair246);
+            first=constant();
 
             state._fsp--;
 
-            match(input,10,FOLLOW_10_in_constNamePair165); 
-            pushFollow(FOLLOW_constant_in_constNamePair167);
-            constant();
+            match(input,11,FOLLOW_11_in_constantPair248); 
+            pushFollow(FOLLOW_constant_in_constantPair252);
+            second=constant();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_constNamePair169); 
+            match(input,12,FOLLOW_12_in_constantPair254); 
+             retval.firstObject = first; retval.secondObject = second; 
 
             }
+
+            retval.stop = input.LT(-1);
 
         }
         catch (RecognitionException re) {
@@ -462,31 +589,39 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return retval;
     }
-    // $ANTLR end "constNamePair"
+    // $ANTLR end "constantPair"
 
 
     // $ANTLR start "predicateFact"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:93:1: predicateFact : predicateName '(' constList ')' '.' ;
-    public final void predicateFact() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:118:1: predicateFact returns [Predicate object] : predicateName '(' constList ')' '.' ;
+    public final Predicate predicateFact() throws RecognitionException {
+        Predicate object = null;
+
+        String predicateName9 = null;
+
+        List<Constant> constList10 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:94:2: ( predicateName '(' constList ')' '.' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:94:4: predicateName '(' constList ')' '.'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:119:2: ( predicateName '(' constList ')' '.' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:119:4: predicateName '(' constList ')' '.'
             {
-            pushFollow(FOLLOW_predicateName_in_predicateFact184);
-            predicateName();
+            pushFollow(FOLLOW_predicateName_in_predicateFact275);
+            predicateName9=predicateName();
 
             state._fsp--;
 
-            match(input,9,FOLLOW_9_in_predicateFact186); 
-            pushFollow(FOLLOW_constList_in_predicateFact188);
-            constList();
+            match(input,10,FOLLOW_10_in_predicateFact277); 
+            pushFollow(FOLLOW_constList_in_predicateFact279);
+            constList10=constList();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_predicateFact190); 
-            match(input,8,FOLLOW_8_in_predicateFact192); 
+            match(input,12,FOLLOW_12_in_predicateFact281); 
+            match(input,9,FOLLOW_9_in_predicateFact283); 
+             object = new Predicate(predicateName9, constList10); 
 
             }
 
@@ -497,44 +632,54 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "predicateFact"
 
 
     // $ANTLR start "constList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:97:1: constList : constant ( ',' constant )* ;
-    public final void constList() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:122:1: constList returns [List<Constant> list] : first= constant ( ',' second= constant )* ;
+    public final List<Constant> constList() throws RecognitionException {
+        List<Constant> list = null;
+
+        Constant first = null;
+
+        Constant second = null;
+
+
+         list = new ArrayList<Constant>(); 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:98:2: ( constant ( ',' constant )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:98:4: constant ( ',' constant )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:2: (first= constant ( ',' second= constant )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:4: first= constant ( ',' second= constant )*
             {
-            pushFollow(FOLLOW_constant_in_constList204);
-            constant();
+            pushFollow(FOLLOW_constant_in_constList308);
+            first=constant();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:98:13: ( ',' constant )*
+             list.add(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:49: ( ',' second= constant )*
             loop6:
             do {
                 int alt6=2;
                 int LA6_0 = input.LA(1);
 
-                if ( (LA6_0==10) ) {
+                if ( (LA6_0==11) ) {
                     alt6=1;
                 }
 
 
                 switch (alt6) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:98:14: ',' constant
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:50: ',' second= constant
             	    {
-            	    match(input,10,FOLLOW_10_in_constList207); 
-            	    pushFollow(FOLLOW_constant_in_constList209);
-            	    constant();
+            	    match(input,11,FOLLOW_11_in_constList313); 
+            	    pushFollow(FOLLOW_constant_in_constList317);
+            	    second=constant();
 
             	    state._fsp--;
 
+            	     list.add(second); 
 
             	    }
             	    break;
@@ -554,58 +699,33 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return list;
     }
     // $ANTLR end "constList"
 
 
-    // $ANTLR start "rule"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:101:1: rule : predicateTerm '<-' predicateTermList '.' ;
-    public final void rule() throws RecognitionException {
-        try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:102:2: ( predicateTerm '<-' predicateTermList '.' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:102:4: predicateTerm '<-' predicateTermList '.'
-            {
-            pushFollow(FOLLOW_predicateTerm_in_rule222);
-            predicateTerm();
-
-            state._fsp--;
-
-            match(input,12,FOLLOW_12_in_rule224); 
-            pushFollow(FOLLOW_predicateTermList_in_rule226);
-            predicateTermList();
-
-            state._fsp--;
-
-            match(input,8,FOLLOW_8_in_rule228); 
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-        }
-        return ;
-    }
-    // $ANTLR end "rule"
-
-
     // $ANTLR start "predicateTermList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:105:1: predicateTermList : predicateTerm ( ';' predicateTerm )* ;
-    public final void predicateTermList() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:127:1: predicateTermList returns [List<Predicate> list] : first= predicateTerm ( ';' second= predicateTerm )* ;
+    public final List<Predicate> predicateTermList() throws RecognitionException {
+        List<Predicate> list = null;
+
+        Predicate first = null;
+
+        Predicate second = null;
+
+
+         list = new ArrayList<Predicate>(); 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:106:2: ( predicateTerm ( ';' predicateTerm )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:106:4: predicateTerm ( ';' predicateTerm )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:2: (first= predicateTerm ( ';' second= predicateTerm )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:4: first= predicateTerm ( ';' second= predicateTerm )*
             {
-            pushFollow(FOLLOW_predicateTerm_in_predicateTermList240);
-            predicateTerm();
+            pushFollow(FOLLOW_predicateTerm_in_predicateTermList345);
+            first=predicateTerm();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:106:18: ( ';' predicateTerm )*
+             list.add(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:54: ( ';' second= predicateTerm )*
             loop7:
             do {
                 int alt7=2;
@@ -618,14 +738,15 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt7) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:106:19: ';' predicateTerm
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:55: ';' second= predicateTerm
             	    {
-            	    match(input,13,FOLLOW_13_in_predicateTermList243); 
-            	    pushFollow(FOLLOW_predicateTerm_in_predicateTermList245);
-            	    predicateTerm();
+            	    match(input,13,FOLLOW_13_in_predicateTermList350); 
+            	    pushFollow(FOLLOW_predicateTerm_in_predicateTermList354);
+            	    second=predicateTerm();
 
             	    state._fsp--;
 
+            	     list.add(second); 
 
             	    }
             	    break;
@@ -645,30 +766,38 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return list;
     }
     // $ANTLR end "predicateTermList"
 
 
     // $ANTLR start "predicateTerm"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:109:1: predicateTerm : predicateName '(' argumentList ')' ;
-    public final void predicateTerm() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:132:1: predicateTerm returns [Predicate object] : predicateName '(' argumentList ')' ;
+    public final Predicate predicateTerm() throws RecognitionException {
+        Predicate object = null;
+
+        String predicateName11 = null;
+
+        List<AtomSign> argumentList12 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:2: ( predicateName '(' argumentList ')' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:4: predicateName '(' argumentList ')'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:133:2: ( predicateName '(' argumentList ')' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:133:4: predicateName '(' argumentList ')'
             {
-            pushFollow(FOLLOW_predicateName_in_predicateTerm259);
-            predicateName();
+            pushFollow(FOLLOW_predicateName_in_predicateTerm375);
+            predicateName11=predicateName();
 
             state._fsp--;
 
-            match(input,9,FOLLOW_9_in_predicateTerm261); 
-            pushFollow(FOLLOW_argumentList_in_predicateTerm263);
-            argumentList();
+            match(input,10,FOLLOW_10_in_predicateTerm377); 
+            pushFollow(FOLLOW_argumentList_in_predicateTerm379);
+            argumentList12=argumentList();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_predicateTerm265); 
+            match(input,12,FOLLOW_12_in_predicateTerm381); 
+             object = new Predicate(predicateName11, argumentList12); 
 
             }
 
@@ -679,44 +808,54 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "predicateTerm"
 
 
     // $ANTLR start "argumentList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:113:1: argumentList : argumentName ( ',' argumentName )* ;
-    public final void argumentList() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:136:1: argumentList returns [List<AtomSign> list] : first= argument ( ',' second= argument )* ;
+    public final List<AtomSign> argumentList() throws RecognitionException {
+        List<AtomSign> list = null;
+
+        AtomSign first = null;
+
+        AtomSign second = null;
+
+
+         list = new ArrayList<AtomSign>(); 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:2: ( argumentName ( ',' argumentName )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:4: argumentName ( ',' argumentName )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:2: (first= argument ( ',' second= argument )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:4: first= argument ( ',' second= argument )*
             {
-            pushFollow(FOLLOW_argumentName_in_argumentList277);
-            argumentName();
+            pushFollow(FOLLOW_argument_in_argumentList407);
+            first=argument();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:17: ( ',' argumentName )*
+             list.add(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:49: ( ',' second= argument )*
             loop8:
             do {
                 int alt8=2;
                 int LA8_0 = input.LA(1);
 
-                if ( (LA8_0==10) ) {
+                if ( (LA8_0==11) ) {
                     alt8=1;
                 }
 
 
                 switch (alt8) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:18: ',' argumentName
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:50: ',' second= argument
             	    {
-            	    match(input,10,FOLLOW_10_in_argumentList280); 
-            	    pushFollow(FOLLOW_argumentName_in_argumentList282);
-            	    argumentName();
+            	    match(input,11,FOLLOW_11_in_argumentList412); 
+            	    pushFollow(FOLLOW_argument_in_argumentList416);
+            	    second=argument();
 
             	    state._fsp--;
 
+            	     list.add(second); 
 
             	    }
             	    break;
@@ -736,16 +875,23 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return list;
     }
     // $ANTLR end "argumentList"
 
 
-    // $ANTLR start "argumentName"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:117:1: argumentName : ( constant | variable );
-    public final void argumentName() throws RecognitionException {
+    // $ANTLR start "argument"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:141:1: argument returns [AtomSign object] : ( constant | variable );
+    public final AtomSign argument() throws RecognitionException {
+        AtomSign object = null;
+
+        Constant constant13 = null;
+
+        Variable variable14 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:118:2: ( constant | variable )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:2: ( constant | variable )
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -763,24 +909,26 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt9) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:118:4: constant
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:4: constant
                     {
-                    pushFollow(FOLLOW_constant_in_argumentName295);
-                    constant();
+                    pushFollow(FOLLOW_constant_in_argument435);
+                    constant13=constant();
 
                     state._fsp--;
 
+                     object = constant13; 
 
                     }
                     break;
                 case 2 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:118:15: variable
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:143:4: variable
                     {
-                    pushFollow(FOLLOW_variable_in_argumentName299);
-                    variable();
+                    pushFollow(FOLLOW_variable_in_argument442);
+                    variable14=variable();
 
                     state._fsp--;
 
+                     object = variable14; 
 
                     }
                     break;
@@ -793,23 +941,27 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
-    // $ANTLR end "argumentName"
+    // $ANTLR end "argument"
 
 
     // $ANTLR start "goal"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:121:1: goal : goalTermList ;
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:146:1: goal : goalTermList ;
     public final void goal() throws RecognitionException {
+        List<Predicate> goalTermList15 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:122:2: ( goalTermList )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:122:4: goalTermList
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:147:2: ( goalTermList )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:147:4: goalTermList
             {
-            pushFollow(FOLLOW_goalTermList_in_goal311);
-            goalTermList();
+            pushFollow(FOLLOW_goalTermList_in_goal456);
+            goalTermList15=goalTermList();
 
             state._fsp--;
 
+             goal = new Goal(goalTermList15); 
 
             }
 
@@ -826,18 +978,27 @@ public class LogicLanguageParser extends Parser {
 
 
     // $ANTLR start "goalTermList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:125:1: goalTermList : goalTerm ( ';' goalTerm )* ;
-    public final void goalTermList() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:150:1: goalTermList returns [List<Predicate> list] : first= goalTerm ( ';' second= goalTerm )* ;
+    public final List<Predicate> goalTermList() throws RecognitionException {
+        List<Predicate> list = null;
+
+        Predicate first = null;
+
+        Predicate second = null;
+
+
+         list = new ArrayList<Predicate>(); 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:126:2: ( goalTerm ( ';' goalTerm )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:126:4: goalTerm ( ';' goalTerm )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:2: (first= goalTerm ( ';' second= goalTerm )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:4: first= goalTerm ( ';' second= goalTerm )*
             {
-            pushFollow(FOLLOW_goalTerm_in_goalTermList322);
-            goalTerm();
+            pushFollow(FOLLOW_goalTerm_in_goalTermList481);
+            first=goalTerm();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:126:13: ( ';' goalTerm )*
+             list.add(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:49: ( ';' second= goalTerm )*
             loop10:
             do {
                 int alt10=2;
@@ -850,14 +1011,15 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt10) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:126:14: ';' goalTerm
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:50: ';' second= goalTerm
             	    {
-            	    match(input,13,FOLLOW_13_in_goalTermList325); 
-            	    pushFollow(FOLLOW_goalTerm_in_goalTermList327);
-            	    goalTerm();
+            	    match(input,13,FOLLOW_13_in_goalTermList486); 
+            	    pushFollow(FOLLOW_goalTerm_in_goalTermList490);
+            	    second=goalTerm();
 
             	    state._fsp--;
 
+            	     list.add(second); 
 
             	    }
             	    break;
@@ -877,25 +1039,32 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return list;
     }
     // $ANTLR end "goalTermList"
 
 
     // $ANTLR start "goalTerm"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:1: goalTerm : predicateName '(' ( goalArgumentList )? ')' ;
-    public final void goalTerm() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:155:1: goalTerm returns [Predicate object] : predicateName '(' ( goalArgumentList )? ')' ;
+    public final Predicate goalTerm() throws RecognitionException {
+        Predicate object = null;
+
+        String predicateName16 = null;
+
+        List<AtomSign> goalArgumentList17 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:130:2: ( predicateName '(' ( goalArgumentList )? ')' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:130:4: predicateName '(' ( goalArgumentList )? ')'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:156:2: ( predicateName '(' ( goalArgumentList )? ')' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:156:4: predicateName '(' ( goalArgumentList )? ')'
             {
-            pushFollow(FOLLOW_predicateName_in_goalTerm340);
-            predicateName();
+            pushFollow(FOLLOW_predicateName_in_goalTerm509);
+            predicateName16=predicateName();
 
             state._fsp--;
 
-            match(input,9,FOLLOW_9_in_goalTerm342); 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:130:22: ( goalArgumentList )?
+            match(input,10,FOLLOW_10_in_goalTerm511); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:156:22: ( goalArgumentList )?
             int alt11=2;
             int LA11_0 = input.LA(1);
 
@@ -904,10 +1073,10 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt11) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:130:22: goalArgumentList
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:156:22: goalArgumentList
                     {
-                    pushFollow(FOLLOW_goalArgumentList_in_goalTerm344);
-                    goalArgumentList();
+                    pushFollow(FOLLOW_goalArgumentList_in_goalTerm513);
+                    goalArgumentList17=goalArgumentList();
 
                     state._fsp--;
 
@@ -917,7 +1086,8 @@ public class LogicLanguageParser extends Parser {
 
             }
 
-            match(input,11,FOLLOW_11_in_goalTerm347); 
+            match(input,12,FOLLOW_12_in_goalTerm516); 
+             object = new Predicate(predicateName16, goalArgumentList17); 
 
             }
 
@@ -928,44 +1098,54 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "goalTerm"
 
 
     // $ANTLR start "goalArgumentList"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:133:1: goalArgumentList : goalArgumentName ( ',' goalArgumentName )* ;
-    public final void goalArgumentList() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:159:1: goalArgumentList returns [List<AtomSign> list] : first= goalArgument ( ',' second= goalArgument )* ;
+    public final List<AtomSign> goalArgumentList() throws RecognitionException {
+        List<AtomSign> list = null;
+
+        AtomSign first = null;
+
+        AtomSign second = null;
+
+
+         list = new ArrayList<AtomSign>(); 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:134:2: ( goalArgumentName ( ',' goalArgumentName )* )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:134:4: goalArgumentName ( ',' goalArgumentName )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:2: (first= goalArgument ( ',' second= goalArgument )* )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:4: first= goalArgument ( ',' second= goalArgument )*
             {
-            pushFollow(FOLLOW_goalArgumentName_in_goalArgumentList358);
-            goalArgumentName();
+            pushFollow(FOLLOW_goalArgument_in_goalArgumentList540);
+            first=goalArgument();
 
             state._fsp--;
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:134:21: ( ',' goalArgumentName )*
+             list.add(first); 
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:53: ( ',' second= goalArgument )*
             loop12:
             do {
                 int alt12=2;
                 int LA12_0 = input.LA(1);
 
-                if ( (LA12_0==10) ) {
+                if ( (LA12_0==11) ) {
                     alt12=1;
                 }
 
 
                 switch (alt12) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:134:22: ',' goalArgumentName
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:54: ',' second= goalArgument
             	    {
-            	    match(input,10,FOLLOW_10_in_goalArgumentList361); 
-            	    pushFollow(FOLLOW_goalArgumentName_in_goalArgumentList363);
-            	    goalArgumentName();
+            	    match(input,11,FOLLOW_11_in_goalArgumentList545); 
+            	    pushFollow(FOLLOW_goalArgument_in_goalArgumentList549);
+            	    second=goalArgument();
 
             	    state._fsp--;
 
+            	     list.add(second); 
 
             	    }
             	    break;
@@ -985,16 +1165,21 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return list;
     }
     // $ANTLR end "goalArgumentList"
 
 
-    // $ANTLR start "goalArgumentName"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:137:1: goalArgumentName : ( '?' | argumentName );
-    public final void goalArgumentName() throws RecognitionException {
+    // $ANTLR start "goalArgument"
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:164:1: goalArgument returns [AtomSign object] : ( '?' | argument );
+    public final AtomSign goalArgument() throws RecognitionException {
+        AtomSign object = null;
+
+        AtomSign argument18 = null;
+
+
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:2: ( '?' | argumentName )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:165:2: ( '?' | argument )
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -1012,20 +1197,22 @@ public class LogicLanguageParser extends Parser {
             }
             switch (alt13) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:4: '?'
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:165:4: '?'
                     {
-                    match(input,14,FOLLOW_14_in_goalArgumentName375); 
+                    match(input,14,FOLLOW_14_in_goalArgument567); 
+                     object = new Variable("?"); 
 
                     }
                     break;
                 case 2 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:10: argumentName
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:166:4: argument
                     {
-                    pushFollow(FOLLOW_argumentName_in_goalArgumentName379);
-                    argumentName();
+                    pushFollow(FOLLOW_argument_in_goalArgument574);
+                    argument18=argument();
 
                     state._fsp--;
 
+                     object = argument18; 
 
                     }
                     break;
@@ -1038,19 +1225,24 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
-    // $ANTLR end "goalArgumentName"
+    // $ANTLR end "goalArgument"
 
 
     // $ANTLR start "similarityName"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:141:1: similarityName : ( LOWER_SYMBOL )+ ;
-    public final void similarityName() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:169:1: similarityName returns [String name] : ( LOWER_SYMBOL )+ ;
+    public final String similarityName() throws RecognitionException {
+        String name = null;
+
+        Token LOWER_SYMBOL19=null;
+
+         name = ""; 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:2: ( ( LOWER_SYMBOL )+ )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:4: ( LOWER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:2: ( ( LOWER_SYMBOL )+ )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:4: ( LOWER_SYMBOL )+
             {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:4: ( LOWER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:4: ( LOWER_SYMBOL )+
             int cnt14=0;
             loop14:
             do {
@@ -1064,9 +1256,10 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt14) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:142:4: LOWER_SYMBOL
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:5: LOWER_SYMBOL
             	    {
-            	    match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_similarityName391); 
+            	    LOWER_SYMBOL19=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_similarityName598); 
+            	     name = name + LOWER_SYMBOL19.getText(); 
 
             	    }
             	    break;
@@ -1090,19 +1283,24 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return name;
     }
     // $ANTLR end "similarityName"
 
 
     // $ANTLR start "predicateName"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:145:1: predicateName : ( UPPER_SYMBOL )+ ;
-    public final void predicateName() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:174:1: predicateName returns [String name] : ( UPPER_SYMBOL )+ ;
+    public final String predicateName() throws RecognitionException {
+        String name = null;
+
+        Token UPPER_SYMBOL20=null;
+
+         name = ""; 
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:146:2: ( ( UPPER_SYMBOL )+ )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:146:4: ( UPPER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:2: ( ( UPPER_SYMBOL )+ )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:4: ( UPPER_SYMBOL )+
             {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:146:4: ( UPPER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:4: ( UPPER_SYMBOL )+
             int cnt15=0;
             loop15:
             do {
@@ -1116,9 +1314,10 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt15) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:146:4: UPPER_SYMBOL
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:5: UPPER_SYMBOL
             	    {
-            	    match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_predicateName404); 
+            	    UPPER_SYMBOL20=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_predicateName624); 
+            	     name = name + UPPER_SYMBOL20.getText(); 
 
             	    }
             	    break;
@@ -1142,19 +1341,24 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return name;
     }
     // $ANTLR end "predicateName"
 
 
     // $ANTLR start "constant"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:149:1: constant : ( LOWER_SYMBOL )+ ;
-    public final void constant() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:179:1: constant returns [Constant object] : ( LOWER_SYMBOL )+ ;
+    public final Constant constant() throws RecognitionException {
+        Constant object = null;
+
+        Token LOWER_SYMBOL21=null;
+
+         String name = "";
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:150:2: ( ( LOWER_SYMBOL )+ )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:150:4: ( LOWER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:182:2: ( ( LOWER_SYMBOL )+ )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:182:4: ( LOWER_SYMBOL )+
             {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:150:4: ( LOWER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:182:4: ( LOWER_SYMBOL )+
             int cnt16=0;
             loop16:
             do {
@@ -1168,9 +1372,10 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt16) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:150:4: LOWER_SYMBOL
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:182:5: LOWER_SYMBOL
             	    {
-            	    match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_constant417); 
+            	    LOWER_SYMBOL21=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_constant655); 
+            	     name = name + LOWER_SYMBOL21.getText(); 
 
             	    }
             	    break;
@@ -1187,6 +1392,7 @@ public class LogicLanguageParser extends Parser {
 
             }
 
+             object = new Constant(name); 
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -1194,19 +1400,24 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "constant"
 
 
     // $ANTLR start "variable"
-    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:153:1: variable : ( UPPER_SYMBOL )+ ;
-    public final void variable() throws RecognitionException {
+    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:185:1: variable returns [Variable object] : ( UPPER_SYMBOL )+ ;
+    public final Variable variable() throws RecognitionException {
+        Variable object = null;
+
+        Token UPPER_SYMBOL22=null;
+
+         String name = "";
         try {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:154:2: ( ( UPPER_SYMBOL )+ )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:154:4: ( UPPER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:188:2: ( ( UPPER_SYMBOL )+ )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:188:4: ( UPPER_SYMBOL )+
             {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:154:4: ( UPPER_SYMBOL )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:188:4: ( UPPER_SYMBOL )+
             int cnt17=0;
             loop17:
             do {
@@ -1220,9 +1431,10 @@ public class LogicLanguageParser extends Parser {
 
                 switch (alt17) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:154:4: UPPER_SYMBOL
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:188:5: UPPER_SYMBOL
             	    {
-            	    match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_variable430); 
+            	    UPPER_SYMBOL22=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_variable686); 
+            	     name = name + UPPER_SYMBOL22.getText(); 
 
             	    }
             	    break;
@@ -1239,6 +1451,7 @@ public class LogicLanguageParser extends Parser {
 
             }
 
+             object = new Variable(name); 
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -1246,7 +1459,7 @@ public class LogicLanguageParser extends Parser {
         }
         finally {
         }
-        return ;
+        return object;
     }
     // $ANTLR end "variable"
 
@@ -1261,21 +1474,21 @@ public class LogicLanguageParser extends Parser {
     static final String DFA2_minS =
         "\1\4\1\5\2\uffff\3\4\1\10\1\4";
     static final String DFA2_maxS =
-        "\1\5\1\11\2\uffff\1\5\1\13\1\5\1\14\1\13";
+        "\1\5\1\12\2\uffff\1\5\1\14\1\5\1\11\1\14";
     static final String DFA2_acceptS =
         "\2\uffff\1\2\1\1\5\uffff";
     static final String DFA2_specialS =
         "\11\uffff}>";
     static final String[] DFA2_transitionS = {
             "\1\3\1\1",
-            "\1\1\3\uffff\1\4",
+            "\1\1\4\uffff\1\4",
             "",
             "",
             "\1\5\1\2",
-            "\1\5\5\uffff\1\6\1\7",
+            "\1\5\6\uffff\1\6\1\7",
             "\1\10\1\2",
-            "\1\3\3\uffff\1\2",
-            "\1\10\5\uffff\1\6\1\7"
+            "\1\2\1\3",
+            "\1\10\6\uffff\1\6\1\7"
     };
 
     static final short[] DFA2_eot = DFA.unpackEncodedString(DFA2_eotS);
@@ -1308,7 +1521,7 @@ public class LogicLanguageParser extends Parser {
             this.transition = DFA2_transition;
         }
         public String getDescription() {
-            return "()* loopback of 65:9: ( fact )*";
+            return "()* loopback of 77:9: ( fact )*";
         }
     }
  
@@ -1317,65 +1530,65 @@ public class LogicLanguageParser extends Parser {
     public static final BitSet FOLLOW_ruleList_in_base50 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_fact_in_factList63 = new BitSet(new long[]{0x0000000000000032L});
     public static final BitSet FOLLOW_fact_in_factList65 = new BitSet(new long[]{0x0000000000000032L});
-    public static final BitSet FOLLOW_rule_in_ruleList78 = new BitSet(new long[]{0x0000000000000022L});
     public static final BitSet FOLLOW_rule_in_ruleList80 = new BitSet(new long[]{0x0000000000000022L});
-    public static final BitSet FOLLOW_predicateFact_in_fact93 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_similarityRelation_in_fact97 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_similarityName_in_similarityRelation109 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_similarityNamePair_in_similarityRelation111 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_8_in_similarityRelation113 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_predicateNamePair_in_similarityNamePair125 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constNamePair_in_similarityNamePair129 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_9_in_predicateNamePair141 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_predicateName_in_predicateNamePair143 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_10_in_predicateNamePair145 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_predicateName_in_predicateNamePair147 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_predicateNamePair149 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_9_in_constNamePair161 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_constant_in_constNamePair163 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_10_in_constNamePair165 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_constant_in_constNamePair167 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_constNamePair169 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_predicateName_in_predicateFact184 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_9_in_predicateFact186 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_constList_in_predicateFact188 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_predicateFact190 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_8_in_predicateFact192 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constant_in_constList204 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_10_in_constList207 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_constant_in_constList209 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_predicateTerm_in_rule222 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_rule224 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_predicateTermList_in_rule226 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_8_in_rule228 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_predicateTerm_in_predicateTermList240 = new BitSet(new long[]{0x0000000000002002L});
-    public static final BitSet FOLLOW_13_in_predicateTermList243 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_predicateTerm_in_predicateTermList245 = new BitSet(new long[]{0x0000000000002002L});
-    public static final BitSet FOLLOW_predicateName_in_predicateTerm259 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_9_in_predicateTerm261 = new BitSet(new long[]{0x0000000000000030L});
-    public static final BitSet FOLLOW_argumentList_in_predicateTerm263 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_predicateTerm265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_argumentName_in_argumentList277 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_10_in_argumentList280 = new BitSet(new long[]{0x0000000000000030L});
-    public static final BitSet FOLLOW_argumentName_in_argumentList282 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_constant_in_argumentName295 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_in_argumentName299 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_goalTermList_in_goal311 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_goalTerm_in_goalTermList322 = new BitSet(new long[]{0x0000000000002002L});
-    public static final BitSet FOLLOW_13_in_goalTermList325 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_goalTerm_in_goalTermList327 = new BitSet(new long[]{0x0000000000002002L});
-    public static final BitSet FOLLOW_predicateName_in_goalTerm340 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_9_in_goalTerm342 = new BitSet(new long[]{0x0000000000004830L});
-    public static final BitSet FOLLOW_goalArgumentList_in_goalTerm344 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_goalTerm347 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_goalArgumentName_in_goalArgumentList358 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_10_in_goalArgumentList361 = new BitSet(new long[]{0x0000000000004030L});
-    public static final BitSet FOLLOW_goalArgumentName_in_goalArgumentList363 = new BitSet(new long[]{0x0000000000000402L});
-    public static final BitSet FOLLOW_14_in_goalArgumentName375 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_argumentName_in_goalArgumentName379 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LOWER_SYMBOL_in_similarityName391 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_UPPER_SYMBOL_in_predicateName404 = new BitSet(new long[]{0x0000000000000022L});
-    public static final BitSet FOLLOW_LOWER_SYMBOL_in_constant417 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_UPPER_SYMBOL_in_variable430 = new BitSet(new long[]{0x0000000000000022L});
+    public static final BitSet FOLLOW_rule_in_ruleList92 = new BitSet(new long[]{0x0000000000000022L});
+    public static final BitSet FOLLOW_predicateTerm_in_rule112 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_8_in_rule114 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_predicateTermList_in_rule116 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_9_in_rule118 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_predicateFact_in_fact135 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_similarityRelation_in_fact142 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_similarityName_in_similarityRelation160 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_similarityPair_in_similarityRelation162 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_9_in_similarityRelation164 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_predicateNamePair_in_similarityPair184 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constantPair_in_similarityPair194 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_10_in_predicateNamePair212 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_predicateName_in_predicateNamePair216 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_11_in_predicateNamePair218 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_predicateName_in_predicateNamePair222 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_predicateNamePair224 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_10_in_constantPair242 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_constant_in_constantPair246 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_11_in_constantPair248 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_constant_in_constantPair252 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_constantPair254 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_predicateName_in_predicateFact275 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_10_in_predicateFact277 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_constList_in_predicateFact279 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_predicateFact281 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_9_in_predicateFact283 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constant_in_constList308 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_11_in_constList313 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_constant_in_constList317 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_predicateTerm_in_predicateTermList345 = new BitSet(new long[]{0x0000000000002002L});
+    public static final BitSet FOLLOW_13_in_predicateTermList350 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_predicateTerm_in_predicateTermList354 = new BitSet(new long[]{0x0000000000002002L});
+    public static final BitSet FOLLOW_predicateName_in_predicateTerm375 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_10_in_predicateTerm377 = new BitSet(new long[]{0x0000000000000030L});
+    public static final BitSet FOLLOW_argumentList_in_predicateTerm379 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_predicateTerm381 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_argument_in_argumentList407 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_11_in_argumentList412 = new BitSet(new long[]{0x0000000000000030L});
+    public static final BitSet FOLLOW_argument_in_argumentList416 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_constant_in_argument435 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_in_argument442 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_goalTermList_in_goal456 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_goalTerm_in_goalTermList481 = new BitSet(new long[]{0x0000000000002002L});
+    public static final BitSet FOLLOW_13_in_goalTermList486 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_goalTerm_in_goalTermList490 = new BitSet(new long[]{0x0000000000002002L});
+    public static final BitSet FOLLOW_predicateName_in_goalTerm509 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_10_in_goalTerm511 = new BitSet(new long[]{0x0000000000005030L});
+    public static final BitSet FOLLOW_goalArgumentList_in_goalTerm513 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_goalTerm516 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_goalArgument_in_goalArgumentList540 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_11_in_goalArgumentList545 = new BitSet(new long[]{0x0000000000004030L});
+    public static final BitSet FOLLOW_goalArgument_in_goalArgumentList549 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_14_in_goalArgument567 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_argument_in_goalArgument574 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LOWER_SYMBOL_in_similarityName598 = new BitSet(new long[]{0x0000000000000012L});
+    public static final BitSet FOLLOW_UPPER_SYMBOL_in_predicateName624 = new BitSet(new long[]{0x0000000000000022L});
+    public static final BitSet FOLLOW_LOWER_SYMBOL_in_constant655 = new BitSet(new long[]{0x0000000000000012L});
+    public static final BitSet FOLLOW_UPPER_SYMBOL_in_variable686 = new BitSet(new long[]{0x0000000000000022L});
 
 }

@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g 2012-10-04 08:01:20
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g 2012-10-04 10:31:32
 
     package lois.lab1.parser.output;
 
@@ -40,10 +40,11 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = T__8;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:11:6: ( '.' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:11:8: '.'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:11:6: ( '<-' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:11:8: '<-'
             {
-            match('.'); 
+            match("<-"); 
+
 
             }
 
@@ -60,10 +61,10 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = T__9;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:12:6: ( '(' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:12:8: '('
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:12:6: ( '.' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:12:8: '.'
             {
-            match('('); 
+            match('.'); 
 
             }
 
@@ -80,10 +81,10 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = T__10;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:13:7: ( ',' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:13:9: ','
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:13:7: ( '(' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:13:9: '('
             {
-            match(','); 
+            match('('); 
 
             }
 
@@ -100,10 +101,10 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = T__11;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:14:7: ( ')' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:14:9: ')'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:14:7: ( ',' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:14:9: ','
             {
-            match(')'); 
+            match(','); 
 
             }
 
@@ -120,11 +121,10 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = T__12;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:15:7: ( '<-' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:15:9: '<-'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:15:7: ( ')' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:15:9: ')'
             {
-            match("<-"); 
-
+            match(')'); 
 
             }
 
@@ -181,8 +181,8 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = UPPER_SYMBOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:159:2: ( 'A' .. 'Z' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:159:4: 'A' .. 'Z'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:193:2: ( 'A' .. 'Z' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:193:4: 'A' .. 'Z'
             {
             matchRange('A','Z'); 
 
@@ -201,8 +201,8 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = LOWER_SYMBOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:163:2: ( 'a' .. 'z' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:163:4: 'a' .. 'z'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:197:2: ( 'a' .. 'z' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:197:4: 'a' .. 'z'
             {
             matchRange('a','z'); 
 
@@ -221,12 +221,12 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
             {
             match("//"); 
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:14: (~ ( '\\n' | '\\r' ) )*
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:14: (~ ( '\\n' | '\\r' ) )*
             loop1:
             do {
                 int alt1=2;
@@ -239,7 +239,7 @@ public class LogicLanguageLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:14: ~ ( '\\n' | '\\r' )
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:14: ~ ( '\\n' | '\\r' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -259,7 +259,7 @@ public class LogicLanguageLexer extends Lexer {
                 }
             } while (true);
 
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:28: ( '\\r' )?
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:28: ( '\\r' )?
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -268,7 +268,7 @@ public class LogicLanguageLexer extends Lexer {
             }
             switch (alt2) {
                 case 1 :
-                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:167:28: '\\r'
+                    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:201:28: '\\r'
                     {
                     match('\r'); 
 
@@ -295,10 +295,10 @@ public class LogicLanguageLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:3: ( ( '\\t' | ( '\\r' )? '\\n' | ' ' )+ )
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:5: ( '\\t' | ( '\\r' )? '\\n' | ' ' )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:3: ( ( '\\t' | ( '\\r' )? '\\n' | ' ' )+ )
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:5: ( '\\t' | ( '\\r' )? '\\n' | ' ' )+
             {
-            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:5: ( '\\t' | ( '\\r' )? '\\n' | ' ' )+
+            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:5: ( '\\t' | ( '\\r' )? '\\n' | ' ' )+
             int cnt4=0;
             loop4:
             do {
@@ -325,16 +325,16 @@ public class LogicLanguageLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:6: '\\t'
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:6: '\\t'
             	    {
             	    match('\t'); 
 
             	    }
             	    break;
             	case 2 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:13: ( '\\r' )? '\\n'
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:13: ( '\\r' )? '\\n'
             	    {
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:13: ( '\\r' )?
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:13: ( '\\r' )?
             	    int alt3=2;
             	    int LA3_0 = input.LA(1);
 
@@ -343,7 +343,7 @@ public class LogicLanguageLexer extends Lexer {
             	    }
             	    switch (alt3) {
             	        case 1 :
-            	            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:13: '\\r'
+            	            // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:13: '\\r'
             	            {
             	            match('\r'); 
 
@@ -357,7 +357,7 @@ public class LogicLanguageLexer extends Lexer {
             	    }
             	    break;
             	case 3 :
-            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:26: ' '
+            	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:205:26: ' '
             	    {
             	    match(' '); 
 
@@ -389,27 +389,27 @@ public class LogicLanguageLexer extends Lexer {
         // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:1:8: ( T__8 | T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | UPPER_SYMBOL | LOWER_SYMBOL | COMMENT | WS )
         int alt5=11;
         switch ( input.LA(1) ) {
-        case '.':
+        case '<':
             {
             alt5=1;
             }
             break;
-        case '(':
+        case '.':
             {
             alt5=2;
             }
             break;
-        case ',':
+        case '(':
             {
             alt5=3;
             }
             break;
-        case ')':
+        case ',':
             {
             alt5=4;
             }
             break;
-        case '<':
+        case ')':
             {
             alt5=5;
             }

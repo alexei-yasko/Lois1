@@ -19,7 +19,7 @@ public class KnowledgeBase {
     private KnowledgeBase() {
     }
 
-    public static KnowledgeBase getKnowledgeBase() {
+    public static KnowledgeBase getInstance() {
         if (knowledgeBase == null) {
             knowledgeBase = new KnowledgeBase();
         }
@@ -73,5 +73,14 @@ public class KnowledgeBase {
 
     public List<SimilarityRelation> getSimilarityRelationList() {
         return similarityRelationList;
+    }
+
+    @Override
+    public String toString() {
+        return "KnowledgeBase{" +
+            "predicateList=" + predicateList +
+            ", similarityRelationList=" + similarityRelationList +
+            ", ruleList=" + ruleList +
+            '}';
     }
 }

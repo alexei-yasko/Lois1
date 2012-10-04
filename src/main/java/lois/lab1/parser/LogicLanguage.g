@@ -6,7 +6,16 @@ options {
 
 
 @header {
-    package lois.lab1.parser.output;
+    package lois.lab1.parser.output;    
+	
+	import lois.lab1.datastructure.Variable;
+	import lois.lab1.datastructure.Constant;
+	import lois.lab1.datastructure.AtomSign;
+	import lois.lab1.datastructure.Predicate;
+	import lois.lab1.datastructure.Rule;
+	import lois.lab1.datastructure.SimilarityRelation;
+	import lois.lab1.datastructure.Goal;
+	import lois.lab1.datastructure.KnowledgeBase;
 }
 
 @lexer::header {
@@ -17,7 +26,9 @@ options {
 
 	private static List<String> errorList = new ArrayList<String>();
 	
-	private int errorLine; 
+	private int errorLine;
+	
+	private static Goal goal;
 
     public static void main(String[] args) throws Exception {
     	
@@ -43,6 +54,7 @@ options {
             }
         } else {
             System.out.println("Success!");
+            System.out.println(KnowledgeBase.getInstance().toString());
        	}
    	}
 
@@ -66,92 +78,114 @@ factList
 	;
 	
 ruleList
-	: rule rule*
+	: first=rule 
+	{ KnowledgeBase.getInstance().addRule($first.object); }  
+	(second=rule { KnowledgeBase.getInstance().addRule($second.object); })*
 	;
 	
-fact
-	: predicateFact | similarityRelation
+rule returns [Rule object]
+	: predicateTerm '<-' predicateTermList '.' { object = new Rule($predicateTerm.object, $predicateTermList.list); }
+	;
+
+fact returns [Predicate object]
+	: predicateFact { KnowledgeBase.getInstance().addPredicate($predicateFact.object); }
+	| similarityRelation { KnowledgeBase.getInstance().addSimilarityRelation($similarityRelation.object); }
 	;
 	
-similarityRelation
-	: similarityName similarityNamePair '.'
+similarityRelation returns [SimilarityRelation object]
+	: similarityName similarityPair '.' 
+	{ $object = new SimilarityRelation($similarityName.name, $similarityPair.firstObject, $similarityPair.secondObject); }
 	;
 	
-similarityNamePair
-	: predicateNamePair | constNamePair
+similarityPair returns [AtomSign firstObject, AtomSign secondObject]
+	: predicateNamePair 
+	{ 
+		$firstObject = new Predicate($predicateNamePair.firstName); 
+		$secondObject = new Predicate($predicateNamePair.secondName);
+	} 
+	| constantPair { $firstObject = $constantPair.firstObject; $secondObject = $constantPair.secondObject; }
 	;
 	
-predicateNamePair
-	: '(' predicateName ',' predicateName ')'
+predicateNamePair returns [String firstName, String secondName]
+	: '(' first=predicateName ',' second=predicateName ')' { $firstName = $first.name; $secondName = $second.name; }
 	;
 	
-constNamePair
-	: '(' constant ',' constant ')'
+constantPair returns [Constant firstObject, Constant secondObject]
+	: '(' first=constant ',' second=constant ')' { $firstObject = $first.object; $secondObject = $second.object; }
 	;
 	
 		
-predicateFact
-	: predicateName '(' constList ')' '.'
+predicateFact returns [Predicate object]
+	: predicateName '(' constList ')' '.' { $object = new Predicate($predicateName.name, $constList.list); }
 	;
 	
-constList
-	: constant (',' constant)*
+constList returns [List<Constant> list]
+@init { $list = new ArrayList<Constant>(); }
+	: first=constant { $list.add($first.object); } (',' second=constant { $list.add($second.object); } )*
+	;
+	
+predicateTermList returns [List<Predicate> list]
+@init { $list = new ArrayList<Predicate>(); }
+	: first=predicateTerm { $list.add($first.object); } (';' second=predicateTerm { list.add($second.object); } )*
+	;
+	
+predicateTerm returns [Predicate object]
+	: predicateName '(' argumentList ')' { $object = new Predicate($predicateName.name, $argumentList.list); } 
+	;
+	
+argumentList returns [List<AtomSign> list]
+@init { $list = new ArrayList<AtomSign>(); }
+	: first=argument { $list.add($first.object); } (',' second=argument { $list.add($second.object); })*
 	;
 
-rule
-	: predicateTerm '<-' predicateTermList '.'
-	;
-	
-predicateTermList
-	: predicateTerm (';' predicateTerm)*
-	;
-	
-predicateTerm
-	: predicateName '(' argumentList ')'
-	;
-	
-argumentList
-	: argumentName (',' argumentName)*
-	;
-
-argumentName
-	: constant | variable
+argument returns [AtomSign object]
+	: constant { object = $constant.object; }
+	| variable { object = $variable.object; }
 	;
 	
 goal
-	: goalTermList
+	: goalTermList { goal = new Goal($goalTermList.list); } 
 	;
 
-goalTermList
-	: goalTerm (';' goalTerm)*
+goalTermList returns [List<Predicate> list]
+@init { $list = new ArrayList<Predicate>(); }
+	: first=goalTerm { $list.add($first.object); } (';' second=goalTerm { $list.add($second.object); })*
 	;
 
-goalTerm
-	: predicateName '(' goalArgumentList? ')'
+goalTerm returns [Predicate object]
+	: predicateName '(' goalArgumentList? ')' { $object = new Predicate($predicateName.name, $goalArgumentList.list); }
 	;
 
-goalArgumentList
-	: goalArgumentName (',' goalArgumentName)*
+goalArgumentList returns [List<AtomSign> list]
+@init { $list = new ArrayList<AtomSign>(); }
+	: first=goalArgument { $list.add($first.object); } (',' second=goalArgument { $list.add($second.object); })*
 ;
 
-goalArgumentName
-	: '?' | argumentName
+goalArgument returns [AtomSign object]
+	: '?' { object = new Variable("?"); }
+	| argument { object = $argument.object; }
 	;
 	
-similarityName
-	: LOWER_SYMBOL+
+similarityName returns [String name]
+@init { $name = ""; }
+	: (LOWER_SYMBOL { $name = $name + $LOWER_SYMBOL.getText(); })+
 	;
 	
-predicateName
-	: UPPER_SYMBOL+
+predicateName returns [String name]
+@init { $name = ""; }
+	: (UPPER_SYMBOL { $name = $name + $UPPER_SYMBOL.getText(); })+
 	;
 	
-constant
-	: LOWER_SYMBOL+
+constant returns [Constant object]
+@init { String name = "";}
+@after { $object = new Constant(name); }
+	: (LOWER_SYMBOL { name = name + $LOWER_SYMBOL.getText(); })+
 	;
 	
-variable
-	: UPPER_SYMBOL+
+variable returns [Variable object]
+@init { String name = "";}
+@after { $object = new Variable(name); }
+	: (UPPER_SYMBOL { name = name + $UPPER_SYMBOL.getText(); })+
 	;
 
 	
