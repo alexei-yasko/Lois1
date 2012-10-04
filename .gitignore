@@ -2,6 +2,7 @@
 *.impl
 *.iml
 out
+lib
 
 # Package Files #
 *.jar
