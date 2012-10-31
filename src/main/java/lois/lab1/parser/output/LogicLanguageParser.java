@@ -10,9 +10,10 @@
 	import lois.lab1.datastructure.SimilarityRelation;
 	import lois.lab1.datastructure.Goal;
 	import lois.lab1.datastructure.KnowledgeBase;
+    import lois.lab1.inference.Solver;
 
 
-import org.antlr.runtime.*;
+    import org.antlr.runtime.*;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
@@ -83,6 +84,9 @@ public class LogicLanguageParser extends Parser {
             } else {
                 System.out.println("Success!");
                 System.out.println(KnowledgeBase.getInstance().toString());
+
+                Solver solver = new Solver(KnowledgeBase.getInstance());
+                solver.solve(goal);
            	}
        	}
 

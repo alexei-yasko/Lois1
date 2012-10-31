@@ -3,32 +3,79 @@ package lois.lab1.inference;
 import java.util.ArrayList;
 import java.util.List;
 
+import lois.lab1.datastructure.AtomSign;
+import lois.lab1.datastructure.Predicate;
+
 /**
  * @author Q-YAA
  */
-public class Graph {
+public class UnificationGraph {
 
     private List<Node> nodeList = new ArrayList<Node>();
     private List<Edge> edgeList = new ArrayList<Edge>();
 
-    public Node createNode(String name) {
-        Node node = new Node(name);
-        nodeList.add(node);
+    /**
+     * Create unification graph for two predicates.
+     *
+     * @param predicate1 first predicate
+     * @param predicate2 second predicate
+     * @return result unification graph
+     */
+    public static UnificationGraph create(Predicate predicate1, Predicate predicate2) {
+        UnificationGraph unificationGraph = new UnificationGraph();
+
+        for (int i = 0; i < predicate1.getArgumentList().size(); i++) {
+            UnificationGraph.Node node1 = unificationGraph.createNode(predicate1.getArgumentList().get(i));
+            UnificationGraph.Node node2 = unificationGraph.createNode(predicate2.getArgumentList().get(i));
+            unificationGraph.createEdge(node1, node2);
+        }
+
+        return unificationGraph;
+    }
+
+    /**
+     * Create graph node. If this node doesn't contains in graph adds them.
+     *
+     * @param sign node sign
+     * @return created node
+     */
+    public Node createNode(AtomSign sign) {
+        Node node = new Node(sign);
+
+        if (!nodeList.contains(node)) {
+            nodeList.add(node);
+        }
 
         return node;
     }
 
+    /**
+     * Create edge between nodes.
+     *
+     * @param firstNode first node
+     * @param secondNode second node
+     * @return created edge
+     */
     public Edge createEdge(Node firstNode, Node secondNode) {
         Edge edge = new Edge(firstNode, secondNode);
-        edgeList.add(edge);
+
+        if (!edgeList.contains(edge)) {
+            edgeList.add(edge);
+        }
 
         return edge;
     }
 
-    public Node getNodeByName(String name) {
+    /**
+     * Return node by the given sign.
+     *
+     * @param sign sign to find
+     * @return found node or null
+     */
+    public Node getNodeBySign(AtomSign sign) {
         for (Node node : nodeList) {
 
-            if (node.getName().equals(name)) {
+            if (node.getSign().equals(sign)) {
                 return node;
             }
         }
@@ -36,6 +83,12 @@ public class Graph {
         return null;
     }
 
+    /**
+     * Return all edges that adjacent for given node.
+     *
+     * @param node node to find
+     * @return result edge list
+     */
     public List<Edge> getAdjacentEdges(Node node) {
         List<Edge> adjacentEdges = new ArrayList<Edge>();
 
@@ -48,6 +101,13 @@ public class Graph {
         return adjacentEdges;
     }
 
+    /**
+     * Return edge that connect two given nodes.
+     *
+     * @param node1 first node
+     * @param node2 second node
+     * @return found edge or null
+     */
     public Edge getEdge(Node node1, Node node2) {
         for (Edge edge : edgeList) {
 
@@ -59,16 +119,20 @@ public class Graph {
         return null;
     }
 
-    private class Node {
+    public Unificator buildUnificator() {
+        return null;
+    }
 
-        private String name;
+    public class Node {
 
-        public Node(String name) {
-            this.name = name;
+        private AtomSign sign;
+
+        public Node(AtomSign sign) {
+            this.sign = sign;
         }
 
-        public String getName() {
-            return name;
+        public AtomSign getSign() {
+            return sign;
         }
 
         @Override
@@ -82,7 +146,7 @@ public class Graph {
 
             Node node = (Node) o;
 
-            if (name != null ? !name.equals(node.name) : node.name != null) {
+            if (sign != null ? !sign.equals(node.sign) : node.sign != null) {
                 return false;
             }
 
@@ -91,11 +155,11 @@ public class Graph {
 
         @Override
         public int hashCode() {
-            return name != null ? name.hashCode() : 0;
+            return sign != null ? sign.hashCode() : 0;
         }
     }
 
-    private class Edge {
+    public class Edge {
 
         private Node firstNode;
         private Node secondNode;
@@ -118,7 +182,7 @@ public class Graph {
         }
 
         public boolean isConnectedTo(Node node1, Node node2) {
-            return (firstNode.equals(node1) && secondNode.equals(node2))||
+            return (firstNode.equals(node1) && secondNode.equals(node2)) ||
                 (firstNode.equals(node2) && secondNode.equals(node1));
         }
 
