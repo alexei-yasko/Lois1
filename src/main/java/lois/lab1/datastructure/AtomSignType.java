@@ -3,7 +3,7 @@ package lois.lab1.datastructure;
 /**
  * @author Svet
  */
-enum AtomSignType {
+public enum AtomSignType {
 	CONST,
 	VAR,
     PREDICATE,

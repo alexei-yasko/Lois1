@@ -35,4 +35,8 @@ public class Unificator {
 
         return resultUnification;
     }
+
+    public List<Pair<AtomSign, AtomSign>> getUnificatorElementList() {
+        return unificatorElementList;
+    }
 }

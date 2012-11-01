@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lois.lab1.datastructure.AtomSign;
+import lois.lab1.datastructure.AtomSignType;
+import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
 
 /**
@@ -120,6 +122,52 @@ public class UnificationGraph {
     }
 
     public Unificator buildUnificator() {
+        Unificator unificator = new Unificator();
+
+        for (Edge edge : edgeList) {
+            Node connectedToFirstConstNode = getConnectedConstNode(edge.getFirstNode());
+            Node connectedToSecondConstNode = getConnectedConstNode(edge.getSecondNode());
+
+            if (connectedToFirstConstNode != null) {
+                unificator.addElement(
+                    new Pair<AtomSign, AtomSign>(edge.getFirstNode().getSign(), connectedToFirstConstNode.getSign()));
+            }
+            else if (connectedToSecondConstNode != null) {
+                unificator.addElement(
+                    new Pair<AtomSign, AtomSign>(edge.getSecondNode().getSign(), connectedToSecondConstNode.getSign()));
+            }
+            else {
+                unificator.addElement(
+                    new Pair<AtomSign, AtomSign>(edge.getFirstNode().getSign(), edge.getSecondNode().getSign()));
+            }
+        }
+
+        return unificator;
+    }
+
+    private Node getConnectedConstNode(Node node) {
+        return getConnectedConstNodeRec(node, new ArrayList<Node>());
+    }
+
+    private Node getConnectedConstNodeRec(Node node, List<Node> passedNodeList) {
+
+        for (Edge edge : getAdjacentEdges(node)) {
+            Node otherNode = edge.getOther(node);
+
+            if (passedNodeList.contains(otherNode)) {
+                continue;
+            }
+
+            passedNodeList.add(otherNode);
+
+            if (otherNode.getSign().getType() == AtomSignType.CONST) {
+                return otherNode;
+            }
+            else {
+                return getConnectedConstNodeRec(otherNode, passedNodeList);
+            }
+        }
+
         return null;
     }
 
@@ -175,6 +223,10 @@ public class UnificationGraph {
 
         public Node getFirstNode() {
             return firstNode;
+        }
+
+        public Node getOther(Node node) {
+            return firstNode.equals(node) ? secondNode : firstNode;
         }
 
         public boolean isConnectedTo(Node node) {
