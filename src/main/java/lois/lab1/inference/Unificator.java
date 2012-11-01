@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lois.lab1.datastructure.AtomSign;
+import lois.lab1.datastructure.AtomSignType;
 import lois.lab1.datastructure.Pair;
+import lois.lab1.datastructure.Predicate;
 
 /**
  * @author Q-YAA
@@ -24,15 +26,45 @@ public class Unificator {
         unificatorElementList.add(element);
     }
 
-    public List<AtomSign> getUnificationFor(AtomSign sign) {
-        List<AtomSign> resultUnification = new ArrayList<AtomSign>();
+    public AtomSign getUnificationFor(AtomSign sign) {
+        AtomSign unificationResult = findUnificationForAtomType(sign, AtomSignType.CONST);
+
+        if (unificationResult == null) {
+            unificationResult = findUnificationForAtomType(sign, AtomSignType.VAR);
+        }
+
+        return unificationResult;
+    }
+
+    public Predicate getUnificationFor(Predicate predicate) {
+        List<AtomSign> unifitedPredicateArgList = new ArrayList<AtomSign>();
+
+        for (AtomSign atomSign : predicate.getArgumentList()) {
+            AtomSign unificatedArgument = getUnificationFor(atomSign);
+
+            if (unificatedArgument == null) {
+                unificatedArgument = atomSign;
+            }
+
+            unifitedPredicateArgList.add(unificatedArgument);
+        }
+
+        return new Predicate(predicate.getSign(), unifitedPredicateArgList);
+    }
+
+    private AtomSign findUnificationForAtomType(AtomSign atomSign, AtomSignType type) {
+        AtomSign constUnification = null;
 
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
-            if (element.getFirst().equals(sign)) {
-                resultUnification.add(element.getSecond());
+
+            if (element.getFirst().equals(atomSign) && element.getSecond().getType() == type) {
+                constUnification = element.getSecond();
+            }
+            else if (element.getSecond().equals(atomSign) && element.getFirst().getType() == type) {
+                constUnification = element.getFirst();
             }
         }
 
-        return resultUnification;
+        return constUnification;
     }
 }
