@@ -6,6 +6,7 @@ import java.util.List;
 import lois.lab1.datastructure.Goal;
 import lois.lab1.datastructure.KnowledgeBase;
 import lois.lab1.datastructure.Predicate;
+import lois.lab1.datastructure.Rule;
 
 /**
  * @author Q-YAA
@@ -43,5 +44,41 @@ public class Solver {
         }
 
         return resultPredicateList;
+    }
+
+    /**
+     * Method for rule unification.
+     *
+     * @param predicate predicate for witch the is unified.
+     * @param rule rule to unify
+     * @return unified predicate list from the right part of the rule
+     */
+    private List<Predicate> unifyRule(Predicate predicate, Rule rule) {
+        List<Predicate> resultList = new ArrayList<Predicate>();
+        Predicate ruleConsequent = rule.getConsequent();
+
+        if (ruleConsequent.getSign().equals(predicate.getSign())) {
+            return resultList;
+        }
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate, ruleConsequent);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        if (unificator == null) {
+            return resultList;
+        }
+
+        Predicate ruleConsequentUnification = unificator.getUnificationFor(ruleConsequent);
+        Predicate predicateUnification = unificator.getUnificationFor(predicate);
+
+        if (!ruleConsequentUnification.isLogicallyEquivalent(predicateUnification)) {
+            return resultList;
+        }
+
+        for (Predicate reasonPredicate : rule.getReason()) {
+            resultList.add(unificator.getUnificationFor(reasonPredicate));
+        }
+
+        return resultList;
     }
 }
