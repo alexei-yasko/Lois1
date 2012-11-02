@@ -1,5 +1,6 @@
 package lois.lab1.inference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lois.lab1.datastructure.Goal;
@@ -22,22 +23,25 @@ public class Solver {
     }
 
     /**
-     * Method for the predicateToUnify unification.
+     * Method that find all possible logically equivalent predicates in knowledge base.
      *
-     * <p> For the predicateToUnify unification use {@link UnificationGraph}</p>
+     * <p> For the predicate unification used {@link UnificationGraph} and {@link Unificator} </p>
      *
-     * @param predicateToUnify predicateToUnify that should be unificated
-     * @param predicateList predicateToUnify list for unification
-     * @return predicateToUnify list witch are the result of unification
+     * @param predicate predicate to find logically the same predicates
+     * @return logically equivalent predicates
      */
-    private List<Predicate> unify(Predicate predicateToUnify, List<Predicate> predicateList) {
-        for (Predicate currentPredicate : predicateList) {
+    private List<Predicate> findLogicallySamePredicatesFromFacts(Predicate predicate) {
+        List<Predicate> resultPredicateList = new ArrayList<Predicate>();
 
-            if (predicateToUnify.getSign().equals(currentPredicate.getSign())) {
-                UnificationGraph unificationGraph = UnificationGraph.create(predicateToUnify, currentPredicate);
+        for (Predicate factPredicate : knowledgeBase.getPredicateList()) {
+            UnificationGraph unificationGraph = UnificationGraph.create(factPredicate, predicate);
+            Unificator unificator = unificationGraph.buildUnificator();
+
+            if (unificator != null && unificator.getUnificationFor(predicate).isLogicallyEquivalent(factPredicate)) {
+                resultPredicateList.add(factPredicate);
             }
         }
 
-        return null;
+        return resultPredicateList;
     }
 }
