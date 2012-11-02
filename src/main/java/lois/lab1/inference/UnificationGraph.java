@@ -26,10 +26,20 @@ public class UnificationGraph {
     public static UnificationGraph create(Predicate predicate1, Predicate predicate2) {
         UnificationGraph unificationGraph = new UnificationGraph();
 
-        for (int i = 0; i < predicate1.getArgumentList().size(); i++) {
+        int minArgumentSize = Math.min(predicate1.getArgumentList().size(), predicate2.getArgumentList().size());
+
+        for (int i = 0; i < minArgumentSize; i++) {
             UnificationGraph.Node node1 = unificationGraph.createNode(predicate1.getArgumentList().get(i));
             UnificationGraph.Node node2 = unificationGraph.createNode(predicate2.getArgumentList().get(i));
             unificationGraph.createEdge(node1, node2);
+
+            if (node1.getSign().getType() == AtomSignType.CONST) {
+                unificationGraph.createEdge(node1, node1);
+            }
+
+            if (node2.getSign().getType() == AtomSignType.CONST) {
+                unificationGraph.createEdge(node2, node2);
+            }
         }
 
         return unificationGraph;
@@ -121,6 +131,11 @@ public class UnificationGraph {
         return null;
     }
 
+    /**
+     * Build unificator from the created unification graph.
+     *
+     * @return created unificator
+     */
     public Unificator buildUnificator() {
         Unificator unificator = new Unificator();
 
@@ -158,7 +173,7 @@ public class UnificationGraph {
                 continue;
             }
 
-            passedNodeList.add(otherNode);
+            passedNodeList.add(node);
 
             if (otherNode.getSign().getType() == AtomSignType.CONST) {
                 return otherNode;

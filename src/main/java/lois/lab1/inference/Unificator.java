@@ -27,10 +27,10 @@ public class Unificator {
     }
 
     public AtomSign getUnificationFor(AtomSign sign) {
-        AtomSign unificationResult = findUnificationForAtomType(sign, AtomSignType.CONST);
+        AtomSign unificationResult = findUnificationForAtomSignWithType(sign, AtomSignType.CONST);
 
         if (unificationResult == null) {
-            unificationResult = findUnificationForAtomType(sign, AtomSignType.VAR);
+            unificationResult = findUnificationForAtomSignWithType(sign, AtomSignType.VAR);
         }
 
         return unificationResult;
@@ -52,7 +52,7 @@ public class Unificator {
         return new Predicate(predicate.getSign(), unifitedPredicateArgList);
     }
 
-    private AtomSign findUnificationForAtomType(AtomSign atomSign, AtomSignType type) {
+    private AtomSign findUnificationForAtomSignWithType(AtomSign atomSign, AtomSignType type) {
         AtomSign constUnification = null;
 
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
