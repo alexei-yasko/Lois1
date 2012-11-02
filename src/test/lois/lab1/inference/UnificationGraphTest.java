@@ -11,6 +11,7 @@ import lois.lab1.datastructure.Predicate;
 import lois.lab1.datastructure.Variable;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * @author Q-YAA
@@ -78,5 +79,37 @@ public class UnificationGraphTest {
         Assert.assertThat(unificatedPredicate2.getArgumentList().get(4), is((AtomSign) new Variable("X")));
         Assert.assertThat(unificatedPredicate2.getArgumentList().get(5), is((AtomSign) new Constant("a")));
         Assert.assertThat(unificatedPredicate2.getArgumentList().get(6), is((AtomSign) new Constant("z")));
+    }
+
+    @Test
+    public void testUnificationUnPossibleFirst() {
+        Predicate predicate1 = new Predicate("P", Arrays.asList(
+            new Constant("z"), new Constant("c"), new Constant("a")
+        ));
+
+        Predicate predicate2 = new Predicate("K", Arrays.asList(
+            new Variable("V"), new Variable("V"), new Constant("a")
+        ));
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate1, predicate2);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        Assert.assertThat(unificator, nullValue());
+    }
+
+    @Test
+    public void testUnificationUnPossibleSecond() {
+        Predicate predicate1 = new Predicate("P", Arrays.asList(
+            new Variable("V"), new Constant("c"), new Constant("z")
+        ));
+
+        Predicate predicate2 = new Predicate("K", Arrays.asList(
+            new Variable("V"), new Variable("V"), new Constant("a")
+        ));
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate1, predicate2);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        Assert.assertThat(unificator, nullValue());
     }
 }

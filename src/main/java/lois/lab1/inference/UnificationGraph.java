@@ -157,6 +157,10 @@ public class UnificationGraph {
             }
         }
 
+        if (!unificator.isValid()) {
+            unificator = null;
+        }
+
         return unificator;
     }
 
