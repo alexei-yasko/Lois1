@@ -8,6 +8,9 @@ import java.util.List;
  */
 public class KnowledgeBase {
 
+    /**
+     * Set of facts in the knowledge base.
+     */
     private List<Predicate> predicateList = new ArrayList<Predicate>();
 
     private List<SimilarityRelation> similarityRelationList = new ArrayList<SimilarityRelation>();

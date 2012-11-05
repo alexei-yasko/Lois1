@@ -28,6 +28,30 @@ public class Predicate extends AtomSign {
         return arguments;
     }
 
+    public boolean isLogicallyEquivalent(Predicate otherPredicate) {
+        if (this.equals(otherPredicate)) {
+            return true;
+        }
+
+        if (!this.getSign().equals(otherPredicate.getSign())) {
+            return false;
+        }
+
+        int minArgumentListSize = Math.min(this.arguments.size(), otherPredicate.getArgumentList().size());
+
+        for (int i = 0; i < minArgumentListSize; i++) {
+
+            if (this.arguments.get(i).getType() == AtomSignType.CONST
+                && otherPredicate.getArgumentList().get(i).getType() == AtomSignType.CONST
+                && !this.arguments.get(i).equals(otherPredicate.getArgumentList().get(i))) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

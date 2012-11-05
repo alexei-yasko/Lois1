@@ -69,7 +69,6 @@ public class UnificatorTest {
             new Pair<AtomSign, AtomSign>(new Constant("g"), new Constant("g")),
             new Pair<AtomSign, AtomSign>(new Variable("X"), new Variable("P")),
             new Pair<AtomSign, AtomSign>(new Variable("Y"), new Constant("a")),
-            new Pair<AtomSign, AtomSign>(new Constant("Y"), new Constant("a")),
             new Pair<AtomSign, AtomSign>(new Constant("a"), new Constant("a"))
         );
 

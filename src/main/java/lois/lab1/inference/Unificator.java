@@ -7,6 +7,7 @@ import lois.lab1.datastructure.AtomSign;
 import lois.lab1.datastructure.AtomSignType;
 import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
+import lois.lab1.datastructure.Variable;
 
 /**
  * @author Q-YAA
@@ -27,10 +28,10 @@ public class Unificator {
     }
 
     public AtomSign getUnificationFor(AtomSign sign) {
-        AtomSign unificationResult = findUnificationForAtomType(sign, AtomSignType.CONST);
+        AtomSign unificationResult = findUnificationForAtomSignWithType(sign, AtomSignType.CONST);
 
         if (unificationResult == null) {
-            unificationResult = findUnificationForAtomType(sign, AtomSignType.VAR);
+            unificationResult = findUnificationForAtomSignWithType(sign, AtomSignType.VAR);
         }
 
         return unificationResult;
@@ -52,7 +53,34 @@ public class Unificator {
         return new Predicate(predicate.getSign(), unifitedPredicateArgList);
     }
 
-    private AtomSign findUnificationForAtomType(AtomSign atomSign, AtomSignType type) {
+    public boolean isValid() {
+        boolean isValid = true;
+
+        for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
+
+            if (element.getFirst().getType() == AtomSignType.CONST
+                && element.getSecond().getType() == AtomSignType.CONST
+                && !element.getFirst().equals(element.getSecond())) {
+
+                isValid = false;
+            }
+        }
+
+        for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
+
+            if (element.getFirst().getType() == AtomSignType.VAR && !isVariableHasOneConstantUnification(element.getFirst())) {
+                isValid = false;
+            }
+
+            if (element.getSecond().getType() == AtomSignType.VAR && !isVariableHasOneConstantUnification(element.getSecond())) {
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
+
+    private AtomSign findUnificationForAtomSignWithType(AtomSign atomSign, AtomSignType type) {
         AtomSign constUnification = null;
 
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
@@ -66,5 +94,22 @@ public class Unificator {
         }
 
         return constUnification;
+    }
+
+    private boolean isVariableHasOneConstantUnification(AtomSign variable) {
+        List<AtomSign> constantList = new ArrayList<AtomSign>();
+
+        for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
+
+            if (element.getFirst().equals(variable) && element.getSecond().getType() == AtomSignType.CONST) {
+                constantList.add(element.getSecond());
+            }
+
+            if (element.getSecond().equals(variable) && element.getFirst().getType() == AtomSignType.CONST) {
+                constantList.add(element.getFirst());
+            }
+        }
+
+        return constantList.size() < 2;
     }
 }
