@@ -3,10 +3,15 @@ package lois.lab1.inference;
 import java.util.ArrayList;
 import java.util.List;
 
+import lois.lab1.datastructure.AtomSign;
+import lois.lab1.datastructure.AtomSignType;
+import lois.lab1.datastructure.Constant;
 import lois.lab1.datastructure.Goal;
 import lois.lab1.datastructure.KnowledgeBase;
 import lois.lab1.datastructure.Predicate;
 import lois.lab1.datastructure.Rule;
+import lois.lab1.datastructure.SimilarityRelation;
+import lois.lab1.datastructure.Variable;
 
 /**
  * @author Q-YAA
@@ -80,5 +85,100 @@ public class Solver {
         }
 
         return resultList;
+    }
+
+    /**
+     * Finds atom sign that's similar to the given atom sign (find by the sign).
+     *
+     * @param atomSign atom sign to find similar
+     * @param similarityRelationName name of the similarity relation
+     * @return similar atom sign
+     */
+    private AtomSign findSimilarSign(AtomSign atomSign, String similarityRelationName) {
+
+        for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
+
+            if (similarityRelation.getArgumentList().get(0).getSign().equals(atomSign.getSign())) {
+                return similarityRelation.getArgumentList().get(1);
+            }
+            else if (similarityRelation.getArgumentList().get(1).getSign().equals(atomSign.getSign())) {
+                return similarityRelation.getArgumentList().get(0);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Determines if the similar predicate exist in knowledge base.
+     *
+     * @param predicate predicate to check similar
+     * @param similarityRelationName name of similarity relation
+     * @return true - if similar exist, false - in the other case.
+     */
+    private boolean isSimilarExist(Predicate predicate, String similarityRelationName) {
+
+        boolean isSimilarExist = findSimilarSign(predicate, similarityRelationName) != null;
+
+        for (AtomSign argument : predicate.getArgumentList()) {
+            AtomSign similar = findSimilarSign(argument, similarityRelationName);
+
+            if (argument.getType() == AtomSignType.CONST && similar == null) {
+                isSimilarExist = false;
+                break;
+            }
+        }
+
+        return isSimilarExist;
+    }
+
+    /**
+     * Create predicate that similar to the given predicate.
+     *
+     * <p> If similar predicate doesn't exist returns null. </p>
+     *
+     * @param predicate predicate to find similar
+     * @param similarityRelationName name of similarity relation
+     * @return similar predicate or null
+     */
+    private Predicate createSimilarPredicate(Predicate predicate, String similarityRelationName) {
+
+        if (!isSimilarExist(predicate, similarityRelationName)) {
+            return null;
+        }
+
+        List<AtomSign> newArgumentList = new ArrayList<AtomSign>();
+
+        for (AtomSign argument : predicate.getArgumentList()) {
+
+            if (argument.getType() == AtomSignType.CONST) {
+                newArgumentList.add(new Constant(findSimilarSign(argument, similarityRelationName).getSign()));
+            }
+            else if (argument.getType() == AtomSignType.VAR) {
+                newArgumentList.add(new Variable(argument.getSign()));
+            }
+        }
+
+        return new Predicate(predicate.getSign(), newArgumentList);
+    }
+
+    /**
+     * Find all similar predicates from all similar relation.
+     *
+     * @param predicate predicate to find similar
+     * @return list of the similar predicates
+     */
+    private List<Predicate> findAllSimilarPredicates(Predicate predicate) {
+
+        List<Predicate> similarPredicates = new ArrayList<Predicate>();
+
+        for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
+
+            if (isSimilarExist(predicate, similarityRelation.getSign())) {
+                similarPredicates.add(createSimilarPredicate(predicate, similarityRelation.getSign()));
+            }
+        }
+
+        return similarPredicates;
     }
 }
