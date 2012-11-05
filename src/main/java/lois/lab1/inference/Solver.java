@@ -8,9 +8,11 @@ import lois.lab1.datastructure.AtomSignType;
 import lois.lab1.datastructure.Constant;
 import lois.lab1.datastructure.Goal;
 import lois.lab1.datastructure.KnowledgeBase;
+import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
 import lois.lab1.datastructure.Rule;
 import lois.lab1.datastructure.SimilarityRelation;
+import lois.lab1.datastructure.TreeNode;
 import lois.lab1.datastructure.Variable;
 
 /**
@@ -26,6 +28,47 @@ public class Solver {
 
     public void solve(Goal goal) {
 
+        for (Predicate predicate : goal.getGoalTermList()) {
+            solveRec(new TreeNode(TreeNode.OR_TYPE, null), predicate, "", 0);
+        }
+    }
+
+    public TreeNode solveRec(TreeNode currentNode, Predicate predicate, String similarityName, int deep) {
+        String st = "";
+        for (int i = 0; i < deep; i++) {
+            st = st + "\t";
+        }
+        System.out.println(st + "^" + predicate);
+
+        for (Predicate contradiction : findLogicallySamePredicatesFromFacts(predicate)) {
+            currentNode.addValueList(contradiction.getArgumentList());
+        }
+
+        for (Rule rule : knowledgeBase.getRuleList()) {
+
+            List<Predicate> unificatedRulePredicates = unifyRule(predicate, rule);
+
+            for (Predicate nextPredicate : unificatedRulePredicates) {
+                TreeNode nextNode = new TreeNode(TreeNode.AND_TYPE, currentNode);
+                nextNode.setParent(currentNode);
+                currentNode.addChild(nextNode);
+
+                solveRec(nextNode, nextPredicate, similarityName, deep + 1);
+            }
+        }
+
+        if (similarityName.equals("")) {
+
+            for (Pair<Predicate, String> similarPredicate : findAllSimilarPredicates(predicate)) {
+                TreeNode similarNode = new TreeNode(TreeNode.OR_TYPE, currentNode);
+                currentNode.addChild(similarNode);
+                similarNode.setParent(currentNode);
+
+                solveRec(similarNode, similarPredicate.getFirst(), similarPredicate.getSecond(), deep + 1);
+            }
+        }
+
+        return currentNode;
     }
 
     /**
@@ -159,23 +202,24 @@ public class Solver {
             }
         }
 
-        return new Predicate(predicate.getSign(), newArgumentList);
+        return new Predicate(findSimilarSign(predicate, similarityRelationName).getSign(), newArgumentList);
     }
 
     /**
      * Find all similar predicates from all similar relation.
      *
      * @param predicate predicate to find similar
-     * @return list of the similar predicates
+     * @return list of the similar predicates with them name of the similar relations
      */
-    private List<Predicate> findAllSimilarPredicates(Predicate predicate) {
+    private List<Pair<Predicate, String>> findAllSimilarPredicates(Predicate predicate) {
 
-        List<Predicate> similarPredicates = new ArrayList<Predicate>();
+        List<Pair<Predicate, String>> similarPredicates = new ArrayList<Pair<Predicate, String>>();
 
         for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
 
             if (isSimilarExist(predicate, similarityRelation.getSign())) {
-                similarPredicates.add(createSimilarPredicate(predicate, similarityRelation.getSign()));
+                Predicate similarPredicate = createSimilarPredicate(predicate, similarityRelation.getSign());
+                similarPredicates.add(new Pair<Predicate, String>(similarPredicate, similarityRelation.getSign()));
             }
         }
 
