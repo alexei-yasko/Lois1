@@ -1,7 +1,9 @@
 package lois.lab1.inference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lois.lab1.datastructure.AtomSign;
 import lois.lab1.datastructure.AtomSignType;
@@ -59,7 +61,9 @@ public class Solver {
 
         if (similarityName.equals("")) {
 
-            for (Pair<Predicate, String> similarPredicate : findAllSimilarPredicates(predicate)) {
+            List<Pair<Predicate, String>> similarPredicateList = findAllSimilarPredicates(predicate);
+
+            for (Pair<Predicate, String> similarPredicate : similarPredicateList) {
                 TreeNode similarNode = new TreeNode(TreeNode.OR_TYPE, currentNode);
                 currentNode.addChild(similarNode);
                 similarNode.setParent(currentNode);
@@ -105,7 +109,7 @@ public class Solver {
         List<Predicate> resultList = new ArrayList<Predicate>();
         Predicate ruleConsequent = rule.getConsequent();
 
-        if (ruleConsequent.getSign().equals(predicate.getSign())) {
+        if (!ruleConsequent.getSign().equals(predicate.getSign())) {
             return resultList;
         }
 
@@ -213,7 +217,7 @@ public class Solver {
      */
     private List<Pair<Predicate, String>> findAllSimilarPredicates(Predicate predicate) {
 
-        List<Pair<Predicate, String>> similarPredicates = new ArrayList<Pair<Predicate, String>>();
+        Set<Pair<Predicate, String>> similarPredicates = new HashSet<Pair<Predicate, java.lang.String>>();
 
         for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
 
@@ -223,6 +227,6 @@ public class Solver {
             }
         }
 
-        return similarPredicates;
+        return new ArrayList<Pair<Predicate, String>>(similarPredicates);
     }
 }

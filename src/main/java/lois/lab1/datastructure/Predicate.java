@@ -16,6 +16,8 @@ public class Predicate extends AtomSign {
 
     public Predicate(String sign, List<? extends AtomSign> arguments) {
         setSign(sign);
+
+        handleArgumentList(arguments);
         this.arguments.addAll(arguments);
     }
 
@@ -82,5 +84,15 @@ public class Predicate extends AtomSign {
             "sign=" + getSign() + ";" +
             "arguments=" + arguments +
             '}';
+    }
+
+    private void handleArgumentList(List<? extends AtomSign> arguments) {
+
+        for (int i = 0; i < arguments.size(); i++) {
+
+            if (arguments.get(i).getType() == AtomSignType.VAR && arguments.get(i).getSign().equals("?")) {
+                arguments.get(i).setSign(arguments.get(i).getSign() + "_" + i);
+            }
+        }
     }
 }
