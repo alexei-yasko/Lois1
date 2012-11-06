@@ -17,23 +17,11 @@ public class Node {
 
     private List<Node> children = new ArrayList<Node>();
 
-    private List<AtomSign> constList = new ArrayList<AtomSign>();
+    private List<AtomSign> varList;
 
     public Node(String type, Node parent) {
         this.type = type;
         this.parent = parent;
-    }
-
-    public void addConst(Constant constant) {
-        constList.add(constant);
-    }
-
-    public List<AtomSign> getConstList() {
-        return constList;
-    }
-
-    public void setConstList(List<AtomSign> constList) {
-        this.constList = constList;
     }
 
     public void addChild(Node child) {
