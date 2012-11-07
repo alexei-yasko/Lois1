@@ -9,6 +9,8 @@ import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
 
 /**
+ * Graph class for unification propose.
+ *
  * @author Q-YAA
  */
 public class UnificationGraph {
@@ -164,6 +166,12 @@ public class UnificationGraph {
         return unificator;
     }
 
+    /**
+     * Find const node that connected to the given node.
+     *
+     * @param node node to find
+     * @return found const node or null
+     */
     private Node getConnectedConstNode(Node node) {
         return getConnectedConstNodeRec(node, new ArrayList<Node>());
     }

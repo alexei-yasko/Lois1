@@ -66,7 +66,7 @@ public class Predicate extends AtomSign {
         Predicate predicate = (Predicate) o;
 
         if (!this.getSign().equals(predicate.getSign())
-            || arguments != null ? !arguments.equals(predicate.arguments) : predicate.arguments != null) {
+            || (arguments != null ? !arguments.equals(predicate.arguments) : predicate.arguments != null)) {
             return false;
         }
 

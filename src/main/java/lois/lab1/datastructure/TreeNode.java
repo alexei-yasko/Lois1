@@ -17,11 +17,16 @@ public class TreeNode {
 
     private List<TreeNode> children = new ArrayList<TreeNode>();
 
+    private Predicate nodePredicate;
+
+    private String similarityName = "";
+
     private List<AtomSign> valueList = new ArrayList<AtomSign>();
 
-    public TreeNode(String type, TreeNode parent) {
+    public TreeNode(String type, TreeNode parent, Predicate nodePredicate) {
         this.type = type;
         this.parent = parent;
+        this.nodePredicate = nodePredicate;
     }
 
     public void addValue(AtomSign value) {
@@ -66,5 +71,21 @@ public class TreeNode {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSimilarityName() {
+        return similarityName;
+    }
+
+    public void setSimilarityName(String similarityName) {
+        this.similarityName = similarityName;
+    }
+
+    public Predicate getNodePredicate() {
+        return nodePredicate;
+    }
+
+    public void setNodePredicate(Predicate nodePredicate) {
+        this.nodePredicate = nodePredicate;
     }
 }
