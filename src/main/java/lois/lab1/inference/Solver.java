@@ -61,12 +61,21 @@ public class Solver {
 
             List<Predicate> unificatedRulePredicates = unifyRule(predicate, rule);
 
+            TreeNode unifiedNode = null;
+
+            if (!unificatedRulePredicates.isEmpty()) {
+                unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifyPredicate(rule.getConsequent(), predicate));
+
+                currentNode.addChild(unifiedNode);
+                currentNode.setType(TreeNode.OR_TYPE);
+            }
+
             for (Predicate nextPredicate : unificatedRulePredicates) {
-                TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, currentNode, nextPredicate);
+                TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
                 nextNode.setSimilarityName(similarityName);
 
-                currentNode.addChild(nextNode);
-                currentNode.setType(TreeNode.AND_TYPE);
+                unifiedNode.addChild(nextNode);
+                unifiedNode.setType(TreeNode.AND_TYPE);
 
                 solveRec(nextNode, nextPredicate, similarityName, deep + 1);
             }
@@ -173,6 +182,13 @@ public class Solver {
         }
 
         return resultList;
+    }
+
+    private Predicate unifyPredicate(Predicate predicateToUnify, Predicate predicate) {
+        UnificationGraph unificationGraph = UnificationGraph.create(predicateToUnify, predicate);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        return unificator.getUnificationFor(predicateToUnify);
     }
 
     /**
