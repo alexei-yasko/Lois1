@@ -55,15 +55,8 @@ public class Solver {
             usedPredicate.add(predicate);
         }
 
-        List<Predicate> contradictionList = findLogicallySamePredicatesFromFacts(predicate);
-
-        for (Predicate contradiction : contradictionList) {
-            TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, currentNode, contradiction);
-
-            nextNode.addValueList(contradiction.getArgumentList());
-            nextNode.setSimilarityName(similarityName);
-
-            currentNode.addChild(nextNode);
+        for (Predicate contradiction : findLogicallySamePredicatesFromFacts(predicate)) {
+            currentNode.getValueTable().addTableRow(contradiction.getArgumentList());
             currentNode.setType(TreeNode.AND_TYPE);
         }
 
@@ -118,7 +111,7 @@ public class Solver {
         }
 
         System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-        System.out.println(levelIntend + "values: " + currentNode.getValueList());
+        System.out.println(levelIntend + "values: " + currentNode.getValueTable());
         System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
         System.out.println(levelIntend + "node type: " + currentNode.getType());
 

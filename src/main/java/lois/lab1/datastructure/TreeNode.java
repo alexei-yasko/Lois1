@@ -21,7 +21,9 @@ public class TreeNode {
 
     private String similarityName = "";
 
-    private List<AtomSign> valueList = new ArrayList<AtomSign>();
+    //private List<AtomSign> valueList = new ArrayList<AtomSign>();
+
+    private ValueTable valueTable = new ValueTable();
 
     public TreeNode(String type, TreeNode parent, Predicate nodePredicate) {
         this.type = type;
@@ -29,20 +31,8 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
-    public void addValue(AtomSign value) {
-        valueList.add(value);
-    }
-
-    public void addValueList(List<AtomSign> valueList) {
-        this.valueList.addAll(valueList);
-    }
-
-    public List<AtomSign> getValueList() {
-        return valueList;
-    }
-
-    public void setValueList(List<AtomSign> valueList) {
-        this.valueList = valueList;
+    public ValueTable getValueTable() {
+        return valueTable;
     }
 
     public void addChild(TreeNode child) {
