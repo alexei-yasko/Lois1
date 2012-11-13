@@ -65,11 +65,11 @@ public class Solver {
 
         for (Rule rule : ruleList) {
 
-            List<Predicate> unificatedRulePredicates = unifyRule(predicate, rule);
+            List<Predicate> unifiedRulePredicates = unifyRule(predicate, rule);
             Predicate unifiedConsequent = unifyPredicate(rule.getConsequent(), predicate);
 
             TreeNode unifiedNode = null;
-            if (!unificatedRulePredicates.isEmpty()) {
+            if (!unifiedRulePredicates.isEmpty()) {
                 unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedConsequent);
 
                 currentNode.addChild(unifiedNode);
@@ -78,7 +78,7 @@ public class Solver {
                 usedPredicate.add(unifyPredicate(rule.getConsequent(), predicate));
             }
 
-            for (Predicate nextPredicate : unificatedRulePredicates) {
+            for (Predicate nextPredicate : unifiedRulePredicates) {
                 TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
                 nextNode.setSimilarityName(similarityName);
 
@@ -86,7 +86,6 @@ public class Solver {
                 unifiedNode.setType(TreeNode.AND_TYPE);
 
                 solveRec(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
-
                 usedPredicate.remove(unifiedConsequent);
             }
         }
@@ -107,17 +106,17 @@ public class Solver {
     private void printInferenceTreeRec(TreeNode currentNode, int deep) {
         String levelIntend = "";
         for (int i = 0; i < deep; i++) {
-            levelIntend = levelIntend + "\t";
+            levelIntend = levelIntend + "\t\t";
         }
 
         System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
         System.out.println(levelIntend + "values: " + currentNode.getValueTable());
         System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
         System.out.println(levelIntend + "node type: " + currentNode.getType());
+        System.out.println();
 
         for (TreeNode childNode : currentNode.getChildren()) {
             printInferenceTreeRec(childNode, deep + 1);
-            System.out.println();
         }
     }
 
