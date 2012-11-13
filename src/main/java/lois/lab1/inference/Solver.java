@@ -57,7 +57,18 @@ public class Solver {
             currentNode.setType(TreeNode.AND_TYPE);
         }
 
-        for (Rule rule : knowledgeBase.getRuleList()) {
+        List<Rule> similarRule = createAllSimilarRule();
+
+        List<Rule> ruleList = null;
+
+        if (similarRule.isEmpty()) {
+            ruleList = knowledgeBase.getRuleList();
+        }
+        else {
+            ruleList = similarRule;
+        }
+
+        for (Rule rule : ruleList) {
 
             List<Predicate> unificatedRulePredicates = unifyRule(predicate, rule);
 
@@ -200,7 +211,7 @@ public class Solver {
      */
     private AtomSign findSimilarSign(AtomSign atomSign, String similarityRelationName) {
 
-        for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
+        for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationBySign(similarityRelationName)) {
 
             if (similarityRelation.getArgumentList().get(0).getSign().equals(atomSign.getSign())) {
                 return similarityRelation.getArgumentList().get(1);
@@ -285,5 +296,56 @@ public class Solver {
         }
 
         return new ArrayList<Pair<Predicate, String>>(similarPredicates);
+    }
+
+    /**
+     * Creates similar rule for the given similarity relation.
+     *
+     * @param rule rule to create similar
+     * @param similarityName name of the similarity relation
+     * @return similar rule or null
+     */
+    private Rule createSimilarRule(Rule rule, String similarityName) {
+        Predicate similarConsequent = createSimilarPredicate(rule.getConsequent(), similarityName);
+
+        if (similarConsequent == null) {
+            return null;
+        }
+
+        List<Predicate> similarReason = new ArrayList<Predicate>();
+
+        for (Predicate predicate : rule.getReason()) {
+            Predicate similarPredicate = createSimilarPredicate(predicate, similarityName);
+
+            if (similarPredicate == null) {
+                return null;
+            }
+
+            similarReason.add(similarPredicate);
+        }
+
+        return new Rule(similarConsequent, similarReason);
+    }
+
+    /**
+     * Creates similar rule list for the every rule and every similar relation.
+     *
+     * @return list of the similar rule
+     */
+    private List<Rule> createAllSimilarRule() {
+        List<Rule> similarityRuleList = new ArrayList<Rule>();
+
+        for (String similarityRelationName : knowledgeBase.getAllNameOfSimilarityRelations()) {
+
+            for (Rule rule : knowledgeBase.getRuleList()) {
+                Rule similarRule = createSimilarRule(rule, similarityRelationName);
+
+                if (similarRule != null) {
+                    similarityRuleList.add(similarRule);
+                }
+            }
+        }
+
+        return similarityRuleList;
     }
 }

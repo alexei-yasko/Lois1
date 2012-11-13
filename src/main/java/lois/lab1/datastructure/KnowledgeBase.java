@@ -54,16 +54,35 @@ public class KnowledgeBase {
         return null;
     }
 
-    public Predicate getSimilarityRelationBySign(String sign) {
+    public List<SimilarityRelation> getSimilarityRelationBySign(String sign) {
+        List<SimilarityRelation> resultSimilarityRelationList = new ArrayList<SimilarityRelation>();
 
         for (SimilarityRelation similarityRelation : similarityRelationList) {
 
             if (similarityRelation.getSign().equals(sign)) {
-                return similarityRelation;
+                resultSimilarityRelationList.add(similarityRelation);
             }
         }
 
-        return null;
+        return resultSimilarityRelationList;
+    }
+
+    /**
+     * Return all names of the similarity relation from the knowledge base.
+     *
+     * @return list of the similarity relation names
+     */
+    public List<String> getAllNameOfSimilarityRelations() {
+        List<String> similarityRelationNameList = new ArrayList<String>();
+
+        for (SimilarityRelation similarityRelation : similarityRelationList) {
+
+            if (!similarityRelationNameList.contains(similarityRelation.getSign())) {
+                similarityRelationNameList.add(similarityRelation.getSign());
+            }
+        }
+
+        return similarityRelationNameList;
     }
 
     public List<Predicate> getPredicateList() {
