@@ -7,7 +7,6 @@ import lois.lab1.datastructure.AtomSign;
 import lois.lab1.datastructure.AtomSignType;
 import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
-import lois.lab1.datastructure.Variable;
 
 /**
  * @author Q-YAA
@@ -81,19 +80,19 @@ public class Unificator {
     }
 
     private AtomSign findUnificationForAtomSignWithType(AtomSign atomSign, AtomSignType type) {
-        AtomSign constUnification = null;
+        AtomSign unification = null;
 
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
 
             if (element.getFirst().equals(atomSign) && element.getSecond().getType() == type) {
-                constUnification = element.getSecond();
+                unification = element.getSecond();
             }
             else if (element.getSecond().equals(atomSign) && element.getFirst().getType() == type) {
-                constUnification = element.getFirst();
+                unification = element.getFirst();
             }
         }
 
-        return constUnification;
+        return unification;
     }
 
     private boolean isVariableHasOneConstantUnification(AtomSign variable) {

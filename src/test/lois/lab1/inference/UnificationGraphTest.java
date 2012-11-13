@@ -112,4 +112,24 @@ public class UnificationGraphTest {
 
         Assert.assertThat(unificator, nullValue());
     }
+
+    @Test
+    public void testUnificatorForEqualsVariable() {
+        Predicate predicate1 = new Predicate("P", Arrays.asList(
+            new Variable("X"), new Variable("X")
+        ));
+
+        Predicate predicate2 = new Predicate("K", Arrays.asList(
+            new Variable("V"), new Variable("Z")
+        ));
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate1, predicate2);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        Predicate unificatedPredicate1 = unificator.getUnificationFor(predicate1);
+        Predicate unificatedPredicate2 = unificator.getUnificationFor(predicate2);
+
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(0), is((AtomSign) new Variable("X")));
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(1), is((AtomSign) new Variable("X")));
+    }
 }
