@@ -1,7 +1,6 @@
 package lois.lab1.inference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +12,6 @@ import lois.lab1.datastructure.Goal;
 import lois.lab1.datastructure.KnowledgeBase;
 import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
-import lois.lab1.datastructure.RelationsTable;
 import lois.lab1.datastructure.Rule;
 import lois.lab1.datastructure.SimilarityRelation;
 import lois.lab1.datastructure.TreeNode;
@@ -59,7 +57,7 @@ public class Solver {
         for (Predicate contradiction : findLogicallySameFacts(predicate)) {
             if (isSimilarExist(contradiction, similarityName)) {
                 currentNode.setType(TreeNode.AND_TYPE);
-                currentNode.getRelationsTable().setRowData(predicate.getArgumentList(), contradiction.getArgumentList());
+                currentNode.getRelationsTable().addRow(predicate.getArgumentList(), contradiction.getArgumentList());
             }
         }
 

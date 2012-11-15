@@ -1,7 +1,6 @@
 package lois.lab1.datastructure;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,20 +13,47 @@ public class RelationsTable {
     public RelationsTable() {
     }
 
-    public RelationsTable(List<AtomSign> titles, List<List<AtomSign>> values) {
-
-        for (int i = 0; i < titles.size(); i++) {
-            RelationTableColumn relationTableColumn = new RelationTableColumn(titles.get(i));
-
-            for (List<AtomSign> value : values) {
-                relationTableColumn.addColumnValue(value.get(i));
-            }
-
-            columns.add(relationTableColumn);
-        }
+    public RelationsTable(List<AtomSign> titles, List<List<AtomSign>> rowList) {
+        addRowList(titles, rowList);
     }
 
-    public void setRowData(List<AtomSign> titles, List<AtomSign> values) {
+    public RelationsTable join(RelationsTable that) {
+        RelationsTable resultTable = new RelationsTable();
+
+        for (RelationTableColumn column : columns) {
+            RelationTableColumn sameColumn = that.getColumnByTitle(column.getColumnTitle());
+            if (sameColumn == null) {
+                resultTable.addColumn(column);
+            }
+            else {
+                resultTable.addColumn(column.join(sameColumn));
+                that.removeColumn(sameColumn.getColumnTitle());
+            }
+        }
+
+        for (RelationTableColumn column : that.getColumns()) {
+            resultTable.addColumn(column);
+        }
+
+        return resultTable;
+    }
+
+    public RelationsTable union(RelationsTable that) {
+        if (columns.size() != that.getColumns().size()) {
+            throw new IllegalStateException("not equal column size in the tables!");
+        }
+
+        RelationsTable resultTable = new RelationsTable();
+        resultTable.addRowList(getTitleList(), getAllRows());
+        resultTable.addRowList(getTitleList(), that.getAllRows());
+
+        return resultTable;
+    }
+
+    public void addRow(List<AtomSign> titles, List<AtomSign> values) {
+        if (titles.size() != values.size()) {
+            throw new IllegalStateException("not equal columns and titles size!");
+        }
 
         for (int i = 0; i < titles.size(); i++) {
             RelationTableColumn column = getColumnByTitle(titles.get(i));
@@ -39,6 +65,36 @@ public class RelationsTable {
 
             column.addColumnValue(values.get(i));
         }
+    }
+
+    public void addRowList(List<AtomSign> titles, List<List<AtomSign>> rowList) {
+
+        for (List<AtomSign> row : rowList) {
+            addRow(titles, row);
+        }
+    }
+
+    public List<AtomSign> getRow(int index) {
+        if (index >= columns.get(0).getColumnValueList().size()) {
+            throw new IllegalStateException("Row with the given index doesn't exist!");
+        }
+
+        List<AtomSign> row = new ArrayList<AtomSign>();
+        for (RelationTableColumn column : columns) {
+            row.add(column.getColumnValue(index));
+        }
+
+        return row;
+    }
+
+    public List<List<AtomSign>> getAllRows() {
+        List<List<AtomSign>> rowList = new ArrayList<List<AtomSign>>();
+
+        for (int i = 0; i < columns.get(0).getColumnValueList().size(); i++) {
+            rowList.add(getRow(i));
+        }
+
+        return rowList;
     }
 
     public RelationTableColumn getColumnByTitle(AtomSign title) {
@@ -72,50 +128,27 @@ public class RelationsTable {
         this.columns = columns;
     }
 
+    public List<AtomSign> getTitleList() {
+        List<AtomSign> titleList = new ArrayList<AtomSign>();
+
+        for (RelationTableColumn column : columns) {
+            titleList.add(column.getColumnTitle());
+        }
+
+        return titleList;
+    }
+
+    public void removeColumn(AtomSign title) {
+        for (int i = 0; i < columns.size(); i++) {
+
+            if (columns.get(i).getColumnTitle().equals(title)) {
+                columns.remove(i);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return columns.toString();
-    }
-
-    public class RelationTableColumn {
-
-        private Pair<AtomSign, List<AtomSign>> column;
-
-        public RelationTableColumn(AtomSign title) {
-            column = new Pair<AtomSign,List<AtomSign>>(title, new ArrayList<AtomSign>());
-        }
-
-        public RelationTableColumn(AtomSign title, List<AtomSign> values) {
-            column = new Pair<AtomSign,List<AtomSign>>(title, values);
-        }
-
-        public void addColumnValue(AtomSign value) {
-            column.getSecond().add(value);
-        }
-
-        public AtomSign getColumnValue(int index) {
-            return column.getSecond().get(index);
-        }
-
-        public List<AtomSign> getColumnValueList() {
-            return column.getSecond();
-        }
-
-        public AtomSign getColumnTitle() {
-            return column.getFirst();
-        }
-
-        public void setColumnTitle(AtomSign title) {
-            column = new Pair<AtomSign,List<AtomSign>>(title, column.getSecond());
-        }
-
-        public void addColumnValueList(List<AtomSign> values) {
-            column.getSecond().addAll(values);
-        }
-
-        @Override
-        public String toString() {
-            return column.toString();
-        }
     }
 }
