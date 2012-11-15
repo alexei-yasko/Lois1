@@ -51,19 +51,19 @@ public class Solver {
 
         if (usedPredicate.contains(predicate)) {
             return currentNode;
-        } else {
-            usedPredicate.add(predicate);
+        }
+        usedPredicate.add(predicate);
+
+        for (Predicate contradiction : findLogicallySameFacts(predicate)) {
+            if (isSimilarExist(contradiction, similarityName)) {
+                currentNode.getValueTable().addTableRow(contradiction.getArgumentList());
+                currentNode.setType(TreeNode.AND_TYPE);
+            }
         }
 
-        for (Predicate contradiction : findLogicallySamePredicatesFromFacts(predicate)) {
-            currentNode.getValueTable().addTableRow(contradiction.getArgumentList());
-            currentNode.setType(TreeNode.AND_TYPE);
-        }
+        List<Rule> ruleList = findRuleForPredicateFromKnowledgeBase(predicate);
 
-        List<Pair<Rule, String>> ruleList = createAllPossibleRuleForPredicate(predicate);
-
-        for (Pair<Rule, String> ruleSimilarityPair : ruleList) {
-            Rule rule = ruleSimilarityPair.getFirst();
+        for (Rule rule : ruleList) {
 
             List<Predicate> unifiedRulePredicates = unifyRule(predicate, rule);
             Predicate unifiedConsequent = unifyPredicate(rule.getConsequent(), predicate);
@@ -71,7 +71,7 @@ public class Solver {
             TreeNode unifiedNode = null;
             if (!unifiedRulePredicates.isEmpty()) {
                 unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedConsequent);
-                unifiedNode.setSimilarityName(ruleSimilarityPair.getSecond());
+                unifiedNode.setSimilarityName(similarityName);
                 currentNode.addChild(unifiedNode);
                 currentNode.setType(TreeNode.OR_TYPE);
 
@@ -80,13 +80,45 @@ public class Solver {
 
             for (Predicate nextPredicate : unifiedRulePredicates) {
                 TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
-                nextNode.setSimilarityName(ruleSimilarityPair.getSecond());
+                nextNode.setSimilarityName(similarityName);
 
                 unifiedNode.addChild(nextNode);
                 unifiedNode.setType(TreeNode.AND_TYPE);
 
-                solveRec(nextNode, nextPredicate, ruleSimilarityPair.getSecond(), deep + 1, usedPredicate);
+                solveRec(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
                 usedPredicate.remove(unifiedConsequent);
+            }
+        }
+
+        if (similarityName.equals("")) {
+            List<Pair<Rule, String>> ruleSimilarityPairList = findSimilarRuleForPredicate(predicate);
+
+            for (Pair<Rule, String> ruleSimilarityPair : ruleSimilarityPairList) {
+                similarityName = ruleSimilarityPair.getSecond();
+
+                List<Predicate> unifiedRulePredicates = unifyRule(predicate, ruleSimilarityPair.getFirst());
+                Predicate unifiedConsequent = unifyPredicate(ruleSimilarityPair.getFirst().getConsequent(), predicate);
+
+                TreeNode unifiedNode = null;
+                if (!unifiedRulePredicates.isEmpty()) {
+                    unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedConsequent);
+                    unifiedNode.setSimilarityName(similarityName);
+                    currentNode.addChild(unifiedNode);
+                    currentNode.setType(TreeNode.OR_TYPE);
+
+                    usedPredicate.add(unifyPredicate(ruleSimilarityPair.getFirst().getConsequent(), predicate));
+                }
+
+                for (Predicate nextPredicate : unifiedRulePredicates) {
+                    TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
+                    nextNode.setSimilarityName(similarityName);
+
+                    unifiedNode.addChild(nextNode);
+                    unifiedNode.setType(TreeNode.AND_TYPE);
+
+                    solveRec(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
+                    usedPredicate.remove(unifiedConsequent);
+                }
             }
         }
 
@@ -128,7 +160,7 @@ public class Solver {
      * @param predicate predicate to find logically the same predicates
      * @return logically equivalent predicates
      */
-    private List<Predicate> findLogicallySamePredicatesFromFacts(Predicate predicate) {
+    private List<Predicate> findLogicallySameFacts(Predicate predicate) {
         List<Predicate> resultPredicateList = new ArrayList<Predicate>();
 
         for (Predicate factPredicate : knowledgeBase.getPredicateList()) {
@@ -333,21 +365,40 @@ public class Solver {
         return similarityRuleList;
     }
 
-    private List<Pair<Rule, String>> createAllPossibleRuleForPredicate(Predicate predicateConsequent) {
+    /**
+     * Find all similar rule from the knowledge base for the given predicate.
+     *
+     * @param predicate predicate to find similar rule
+     * @return list of the found similar rule (pair).
+     * First element - similar rule, second element - name of the similarity relation.
+     */
+    private List<Pair<Rule, String>> findSimilarRuleForPredicate(Predicate predicate) {
         List<Pair<Rule, String>> resultList = new ArrayList<Pair<Rule, String>>();
 
         List<Pair<Rule, String>> allSimilarRule = createAllSimilarRule();
         for (Pair<Rule, String> ruleSimilarityPair : allSimilarRule) {
 
-            if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicateConsequent.getSign())) {
+            if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicate.getSign())) {
                 resultList.add(ruleSimilarityPair);
             }
         }
 
+        return resultList;
+    }
+
+    /**
+     * Find all rule from the knowledge base where the given predicate it's consequent.
+     *
+     * @param predicate predicate to find rule
+     * @return list of the found rule
+     */
+    private List<Rule> findRuleForPredicateFromKnowledgeBase(Predicate predicate) {
+        List<Rule> resultList = new ArrayList<Rule>();
+
         for (Rule rule : knowledgeBase.getRuleList()) {
 
-            if (rule.getConsequent().getSign().equals(predicateConsequent.getSign())) {
-                resultList.add(new Pair<Rule, String>(rule, ""));
+            if (rule.getConsequent().getSign().equals(predicate.getSign())) {
+                resultList.add(rule);
             }
         }
 
