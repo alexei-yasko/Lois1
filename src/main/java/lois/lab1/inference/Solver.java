@@ -1,6 +1,7 @@
 package lois.lab1.inference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import lois.lab1.datastructure.Goal;
 import lois.lab1.datastructure.KnowledgeBase;
 import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
+import lois.lab1.datastructure.RelationsTable;
 import lois.lab1.datastructure.Rule;
 import lois.lab1.datastructure.SimilarityRelation;
 import lois.lab1.datastructure.TreeNode;
@@ -56,8 +58,8 @@ public class Solver {
 
         for (Predicate contradiction : findLogicallySameFacts(predicate)) {
             if (isSimilarExist(contradiction, similarityName)) {
-                currentNode.getValueTable().addTableRow(contradiction.getArgumentList());
                 currentNode.setType(TreeNode.AND_TYPE);
+                currentNode.getRelationsTable().setRowData(predicate.getArgumentList(), contradiction.getArgumentList());
             }
         }
 
@@ -142,7 +144,7 @@ public class Solver {
         }
 
         System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-        System.out.println(levelIntend + "values: " + currentNode.getValueTable());
+        System.out.println(levelIntend + "values: " + currentNode.getRelationsTable());
         System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
         System.out.println(levelIntend + "node type: " + currentNode.getType());
         System.out.println();

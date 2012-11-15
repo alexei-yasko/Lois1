@@ -23,7 +23,7 @@ public class TreeNode {
 
     //private List<AtomSign> valueList = new ArrayList<AtomSign>();
 
-    private ValueTable valueTable = new ValueTable();
+    private RelationsTable relationsTable = new RelationsTable();
 
     public TreeNode(String type, TreeNode parent, Predicate nodePredicate) {
         this.type = type;
@@ -31,8 +31,12 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
-    public ValueTable getValueTable() {
-        return valueTable;
+    public RelationsTable getRelationsTable() {
+        return relationsTable;
+    }
+
+    public void setRelationsTable(RelationsTable relationsTable) {
+        this.relationsTable = relationsTable;
     }
 
     public void addChild(TreeNode child) {
