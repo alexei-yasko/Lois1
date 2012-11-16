@@ -54,6 +54,36 @@ public class TreeNode {
         return relationTable;
     }
 
+    /**
+     * Prints tree of the logical inference.
+     */
+    public void printInferenceTree() {
+        printInferenceTreeRec(this, 0);
+    }
+
+    /**
+     * Recursive function that prints tree of the logical inference.
+     *
+     * @param currentNode current node of the tree
+     * @param treeLevel level of the current node in the tree
+     */
+    private void printInferenceTreeRec(TreeNode currentNode, int treeLevel) {
+        String levelIntend = "";
+        for (int i = 0; i < treeLevel; i++) {
+            levelIntend = levelIntend + "\t\t";
+        }
+
+        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
+        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
+        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
+        System.out.println(levelIntend + "node type: " + currentNode.getType());
+        System.out.println();
+
+        for (TreeNode childNode : currentNode.getChildren()) {
+            printInferenceTreeRec(childNode, treeLevel + 1);
+        }
+    }
+
     public RelationTable getRelationTable() {
         return relationTable;
     }
