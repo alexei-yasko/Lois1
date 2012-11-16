@@ -42,6 +42,8 @@ public class Solver {
             TreeNode rootNode =
                 solveRec(new TreeNode(TreeNode.OR_TYPE, null, predicate), predicate, "", 0, new ArrayList<Predicate>());
 
+            rootNode.calculateRelationTable();
+
             printInferenceTree(rootNode);
         }
     }
@@ -57,7 +59,7 @@ public class Solver {
         for (Predicate contradiction : findLogicallySameFacts(predicate)) {
             if (isSimilarExist(contradiction, similarityName)) {
                 currentNode.setType(TreeNode.AND_TYPE);
-                currentNode.getRelationsTable().addRow(predicate.getArgumentList(), contradiction.getArgumentList());
+                currentNode.getRelationTable().addRow(predicate.getArgumentList(), contradiction.getArgumentList());
             }
         }
 
@@ -142,7 +144,7 @@ public class Solver {
         }
 
         System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-        System.out.println(levelIntend + "values: " + currentNode.getRelationsTable());
+        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
         System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
         System.out.println(levelIntend + "node type: " + currentNode.getType());
         System.out.println();

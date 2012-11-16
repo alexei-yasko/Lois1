@@ -21,9 +21,7 @@ public class TreeNode {
 
     private String similarityName = "";
 
-    //private List<AtomSign> valueList = new ArrayList<AtomSign>();
-
-    private RelationsTable relationsTable = new RelationsTable();
+    private RelationTable relationTable = new RelationTable();
 
     public TreeNode(String type, TreeNode parent, Predicate nodePredicate) {
         this.type = type;
@@ -31,12 +29,37 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
-    public RelationsTable getRelationsTable() {
-        return relationsTable;
+    public RelationTable calculateRelationTable() {
+        RelationTable resultRelationTable = new RelationTable();
+
+        if (children.size() == 0) {
+            return relationTable;
+        }
+        else if (type.equals(OR_TYPE)) {
+            resultRelationTable = children.get(0).calculateRelationTable();
+
+            for (int i = 1; i < children.size(); i++) {
+                resultRelationTable = resultRelationTable.union(children.get(i).calculateRelationTable());
+            }
+        }
+        else if (type.equals(AND_TYPE)) {
+            resultRelationTable = children.get(0).calculateRelationTable();
+
+            for (int i = 1; i < children.size(); i++) {
+                resultRelationTable = resultRelationTable.join(children.get(i).calculateRelationTable());
+            }
+        }
+
+        relationTable = resultRelationTable.projectTo(getNodePredicateVariableList());
+        return relationTable;
     }
 
-    public void setRelationsTable(RelationsTable relationsTable) {
-        this.relationsTable = relationsTable;
+    public RelationTable getRelationTable() {
+        return relationTable;
+    }
+
+    public void setRelationTable(RelationTable relationTable) {
+        this.relationTable = relationTable;
     }
 
     public void addChild(TreeNode child) {
@@ -81,5 +104,18 @@ public class TreeNode {
 
     public void setNodePredicate(Predicate nodePredicate) {
         this.nodePredicate = nodePredicate;
+    }
+
+    public List<Variable> getNodePredicateVariableList() {
+        List<Variable> variableList = new ArrayList<Variable>();
+
+        for (AtomSign atomSign : nodePredicate.getArgumentList()) {
+
+            if (atomSign.getType() == AtomSignType.VAR) {
+                variableList.add((Variable) atomSign);
+            }
+        }
+
+        return variableList;
     }
 }

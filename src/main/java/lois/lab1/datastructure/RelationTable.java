@@ -6,19 +6,25 @@ import java.util.List;
 /**
  * @author Q-YAA
  */
-public class RelationsTable {
+public class RelationTable {
 
     private List<RelationTableColumn> columns = new ArrayList<RelationTableColumn>();
 
-    public RelationsTable() {
+    public RelationTable() {
     }
 
-    public RelationsTable(List<AtomSign> titles, List<List<AtomSign>> rowList) {
-        addRowList(titles, rowList);
+    public RelationTable(List<AtomSign> schema, List<List<AtomSign>> rowList) {
+        addRowList(schema, rowList);
     }
 
-    public RelationsTable join(RelationsTable that) {
-        RelationsTable resultTable = new RelationsTable();
+    public RelationTable(List<Variable> schema) {
+        for (AtomSign title : schema) {
+            addColumn(new RelationTableColumn(title));
+        }
+    }
+
+    public RelationTable join(RelationTable that) {
+        RelationTable resultTable = new RelationTable();
 
         for (List<AtomSign> firstRow : getAllRows()) {
 
@@ -36,22 +42,26 @@ public class RelationsTable {
         return resultTable;
     }
 
-    public RelationsTable projectTo(List<AtomSign> schema) {
-        RelationsTable resultRelationTable = new RelationsTable();
+    public RelationTable projectTo(List<Variable> schema) {
+        RelationTable resultRelationTable = new RelationTable(schema);
 
-        for (AtomSign title : schema) {
-            resultRelationTable.addColumn(getColumnByTitle(title));
+        for (Variable title : schema) {
+            RelationTableColumn column = getColumnByTitle(title);
+
+            if (column != null) {
+                resultRelationTable.addColumnValueList(title, column.getColumnValueList());
+            }
         }
 
         return resultRelationTable;
     }
 
-    public RelationsTable union(RelationsTable that) {
+    public RelationTable union(RelationTable that) {
         if (columns.size() != that.getColumns().size()) {
             throw new IllegalStateException("not equal column size in the tables!");
         }
 
-        RelationsTable resultTable = new RelationsTable();
+        RelationTable resultTable = new RelationTable();
         resultTable.addRowList(getTitleList(), getAllRows());
         resultTable.addRowList(getTitleList(), that.getAllRows());
 
@@ -98,8 +108,11 @@ public class RelationsTable {
     public List<List<AtomSign>> getAllRows() {
         List<List<AtomSign>> rowList = new ArrayList<List<AtomSign>>();
 
-        for (int i = 0; i < columns.get(0).getColumnValueList().size(); i++) {
-            rowList.add(getRow(i));
+        if (columns.size() > 0) {
+
+            for (int i = 0; i < columns.get(0).getColumnValueList().size(); i++) {
+                rowList.add(getRow(i));
+            }
         }
 
         return rowList;
@@ -118,6 +131,11 @@ public class RelationsTable {
 
     public void addColumn(RelationTableColumn column) {
         columns.add(column);
+    }
+
+    public void addColumnValueList(Variable title, List<AtomSign> values) {
+        RelationTableColumn column = getColumnByTitle(title);
+        column.addColumnValueList(values);
     }
 
     public List<RelationTableColumn> getColumns() {
