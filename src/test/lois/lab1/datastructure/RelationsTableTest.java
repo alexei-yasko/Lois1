@@ -19,32 +19,13 @@ public class RelationsTableTest {
             new Variable("A"),
             new Variable("B"),
             new Variable("C"),
-            new Variable("D"),
-            new Variable("E")
+            new Variable("D")
         );
 
         List<List<AtomSign>> valuesList1 = Arrays.asList(
-            Arrays.<AtomSign>asList(
-                new Constant("g"),
-                new Constant("f"),
-                new Constant("k"),
-                new Constant("h"),
-                new Constant("m")
-            ),
-            Arrays.<AtomSign>asList(
-                new Constant("f"),
-                new Constant("g"),
-                new Constant("h"),
-                new Constant("k"),
-                new Constant("l")
-            ),
-            Arrays.<AtomSign>asList(
-                new Constant("h"),
-                new Constant("j"),
-                new Constant("g"),
-                new Constant("n"),
-                new Constant("t")
-            )
+            Arrays.<AtomSign>asList(new Constant("g"), new Constant("f"), new Constant("k"), new Constant("h")),
+            Arrays.<AtomSign>asList(new Constant("f"), new Constant("f"), new Constant("h"), new Constant("h")),
+            Arrays.<AtomSign>asList(new Constant("h"), new Constant("j"), new Constant("g"), new Constant("n"))
         );
 
         RelationsTable relationsTable1 = new RelationsTable(titlesList1, valuesList1);
@@ -57,9 +38,9 @@ public class RelationsTableTest {
         );
 
         List<List<AtomSign>> valuesList2 = Arrays.asList(
-            Arrays.<AtomSign>asList(new Constant("e"), new Constant("f"), new Constant("k"), new Constant("u")),
+            Arrays.<AtomSign>asList(new Constant("f"), new Constant("f"), new Constant("k"), new Constant("h")),
             Arrays.<AtomSign>asList(new Constant("f"), new Constant("t"), new Constant("h"), new Constant("k")),
-            Arrays.<AtomSign>asList(new Constant("h"), new Constant("j"), new Constant("g"), new Constant("n"))
+            Arrays.<AtomSign>asList(new Constant("f"), new Constant("j"), new Constant("g"), new Constant("h"))
         );
 
         RelationsTable relationsTable2 = new RelationsTable(titlesList2, valuesList2);
@@ -72,15 +53,31 @@ public class RelationsTableTest {
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("A")).getColumnValueList().get(1),
-            is((AtomSign) new Constant("f"))
+            is((AtomSign) new Constant("g"))
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("A")).getColumnValueList().get(2),
-            is((AtomSign) new Constant("h"))
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("A")).getColumnValueList().get(3),
+            is((AtomSign) new Constant("f"))
         );
 
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("B")).getColumnValueList().get(0),
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("B")).getColumnValueList().get(1),
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("B")).getColumnValueList().get(2),
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("B")).getColumnValueList().get(3),
             is((AtomSign) new Constant("f"))
         );
 
@@ -90,25 +87,49 @@ public class RelationsTableTest {
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("C")).getColumnValueList().get(1),
-            is((AtomSign) new Constant("h"))
+            is((AtomSign) new Constant("k"))
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("C")).getColumnValueList().get(2),
-            is((AtomSign) new Constant("g"))
+            is((AtomSign) new Constant("h"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("C")).getColumnValueList().get(3),
+            is((AtomSign) new Constant("h"))
         );
 
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("D")).getColumnValueList().get(0),
-            is((AtomSign) new Constant("k"))
+            is((AtomSign) new Constant("h"))
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("D")).getColumnValueList().get(1),
-            is((AtomSign) new Constant("n"))
+            is((AtomSign) new Constant("h"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("D")).getColumnValueList().get(2),
+            is((AtomSign) new Constant("h"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("D")).getColumnValueList().get(3),
+            is((AtomSign) new Constant("h"))
         );
 
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("E")).getColumnValueList().get(0),
-            is((AtomSign) new Constant("t"))
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("E")).getColumnValueList().get(1),
+            is((AtomSign) new Constant("j"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("E")).getColumnValueList().get(2),
+            is((AtomSign) new Constant("f"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("E")).getColumnValueList().get(3),
+            is((AtomSign) new Constant("j"))
         );
 
         Assert.assertThat(
@@ -117,10 +138,14 @@ public class RelationsTableTest {
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("K")).getColumnValueList().get(1),
-            is((AtomSign) new Constant("h"))
+            is((AtomSign) new Constant("g"))
         );
         Assert.assertThat(
             resultRelationsTable.getColumnByTitle(new Variable("K")).getColumnValueList().get(2),
+            is((AtomSign) new Constant("k"))
+        );
+        Assert.assertThat(
+            resultRelationsTable.getColumnByTitle(new Variable("K")).getColumnValueList().get(3),
             is((AtomSign) new Constant("g"))
         );
     }

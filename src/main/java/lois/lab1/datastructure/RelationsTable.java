@@ -20,19 +20,17 @@ public class RelationsTable {
     public RelationsTable join(RelationsTable that) {
         RelationsTable resultTable = new RelationsTable();
 
-        for (RelationTableColumn column : columns) {
-            RelationTableColumn sameColumn = that.getColumnByTitle(column.getColumnTitle());
-            if (sameColumn == null) {
-                resultTable.addColumn(column);
-            }
-            else {
-                resultTable.addColumn(column.join(sameColumn));
-                that.removeColumn(sameColumn.getColumnTitle());
-            }
-        }
+        for (List<AtomSign> firstRow : getAllRows()) {
 
-        for (RelationTableColumn column : that.getColumns()) {
-            resultTable.addColumn(column);
+            for (List<AtomSign> secondRow : that.getAllRows()) {
+
+                Pair<List<AtomSign>, List<AtomSign>> newRowWithTitles =
+                    joinRow(getTitleList(), firstRow, that.getTitleList(), secondRow);
+
+                if (newRowWithTitles != null) {
+                    resultTable.addRow(newRowWithTitles.getFirst(), newRowWithTitles.getSecond());
+                }
+            }
         }
 
         return resultTable;
@@ -151,4 +149,42 @@ public class RelationsTable {
     public String toString() {
         return columns.toString();
     }
+
+    private Pair<List<AtomSign>, List<AtomSign>> joinRow(
+        List<AtomSign> titles1, List<AtomSign> values1, List<AtomSign> titles2, List<AtomSign> values2) {
+
+        List<AtomSign> newTitles = new ArrayList<AtomSign>();
+        List<AtomSign> newValues = new ArrayList<AtomSign>();
+
+        for (int i = 0; i < titles1.size(); i++) {
+            AtomSign title = titles1.get(i);
+
+            AtomSign value;
+            if (titles2.contains(title)) {
+                int index = titles2.indexOf(title);
+                value = values2.get(index);
+
+                values2.remove(index);
+                titles2.remove(index);
+            }
+            else {
+                value = values1.get(i);
+            }
+
+            if (!value.equals(values1.get(i))) {
+                return null;
+            }
+
+            newTitles.add(title);
+            newValues.add(value);
+        }
+
+        for (int i = 0; i < titles2.size(); i++) {
+            newTitles.add(titles2.get(i));
+            newValues.add(values2.get(i));
+        }
+
+        return new Pair<List<AtomSign>, List<AtomSign>>(newTitles, newValues);
+    }
+
 }
