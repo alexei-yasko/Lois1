@@ -14,6 +14,31 @@ import static org.hamcrest.core.Is.is;
 public class RelationsTableTest {
 
     @Test
+    public void testProjectTo() {
+        List<AtomSign> titlesList1 = Arrays.<AtomSign>asList(
+            new Variable("A"),
+            new Variable("B"),
+            new Variable("C"),
+            new Variable("D")
+        );
+
+        List<List<AtomSign>> valuesList1 = Arrays.asList(
+            Arrays.<AtomSign>asList(new Constant("g"), new Constant("f"), new Constant("k"), new Constant("h")),
+            Arrays.<AtomSign>asList(new Constant("f"), new Constant("f"), new Constant("h"), new Constant("h")),
+            Arrays.<AtomSign>asList(new Constant("h"), new Constant("j"), new Constant("g"), new Constant("n"))
+        );
+
+        RelationsTable relationsTable = new RelationsTable(titlesList1, valuesList1);
+
+        RelationsTable resultRelationsTable = relationsTable.projectTo(
+            Arrays.<AtomSign>asList(new Variable("B"), new Variable("D")));
+
+        Assert.assertThat(resultRelationsTable.getTitleList().size(), is(2));
+        Assert.assertThat(resultRelationsTable.getTitleList().get(0), is((AtomSign) new Variable("B")));
+        Assert.assertThat(resultRelationsTable.getTitleList().get(1), is((AtomSign) new Variable("D")));
+    }
+
+    @Test
     public void testJoin() {
         List<AtomSign> titlesList1 = Arrays.<AtomSign>asList(
             new Variable("A"),

@@ -36,6 +36,16 @@ public class RelationsTable {
         return resultTable;
     }
 
+    public RelationsTable projectTo(List<AtomSign> schema) {
+        RelationsTable resultRelationTable = new RelationsTable();
+
+        for (AtomSign title : schema) {
+            resultRelationTable.addColumn(getColumnByTitle(title));
+        }
+
+        return resultRelationTable;
+    }
+
     public RelationsTable union(RelationsTable that) {
         if (columns.size() != that.getColumns().size()) {
             throw new IllegalStateException("not equal column size in the tables!");
@@ -110,20 +120,8 @@ public class RelationsTable {
         columns.add(column);
     }
 
-    public void addColumn(Variable variable, List<AtomSign> constantList) {
-        columns.add(new RelationTableColumn(variable, constantList));
-    }
-
-    public RelationTableColumn getColumn(int index) {
-        return columns.get(index);
-    }
-
     public List<RelationTableColumn> getColumns() {
         return columns;
-    }
-
-    public void setColumns(List<RelationTableColumn> columns) {
-        this.columns = columns;
     }
 
     public List<AtomSign> getTitleList() {
