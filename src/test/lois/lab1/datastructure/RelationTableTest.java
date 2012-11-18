@@ -15,7 +15,7 @@ public class RelationTableTest {
 
     @Test
     public void testProjectTo() {
-        List<AtomSign> titlesList1 = Arrays.<AtomSign>asList(
+        List<Variable> titlesList1 = Arrays.asList(
             new Variable("A"),
             new Variable("B"),
             new Variable("C"),
@@ -39,7 +39,7 @@ public class RelationTableTest {
 
     @Test
     public void testJoin() {
-        List<AtomSign> titlesList1 = Arrays.<AtomSign>asList(
+        List<Variable> titlesList1 = Arrays.asList(
             new Variable("A"),
             new Variable("B"),
             new Variable("C"),
@@ -54,7 +54,7 @@ public class RelationTableTest {
 
         RelationTable relationTable1 = new RelationTable(titlesList1, valuesList1);
 
-        List<AtomSign> titlesList2 = Arrays.<AtomSign>asList(
+        List<Variable> titlesList2 = Arrays.asList(
             new Variable("B"),
             new Variable("E"),
             new Variable("K"),
@@ -176,7 +176,7 @@ public class RelationTableTest {
 
     @Test
     public void testUnion() {
-        List<AtomSign> titlesList1 = Arrays.<AtomSign>asList(
+        List<Variable> titlesList1 = Arrays.asList(
             new Variable("A"),
             new Variable("B"),
             new Variable("C"),
@@ -191,7 +191,7 @@ public class RelationTableTest {
 
         RelationTable relationTable1 = new RelationTable(titlesList1, valuesList1);
 
-        List<AtomSign> titlesList2 = Arrays.<AtomSign>asList(
+        List<Variable> titlesList2 = Arrays.asList(
             new Variable("B"),
             new Variable("E"),
             new Variable("K"),
@@ -206,7 +206,9 @@ public class RelationTableTest {
 
         RelationTable relationTable2 = new RelationTable(titlesList2, valuesList2);
 
-        RelationTable resultRelationTable = relationTable1.union(relationTable2);
+        RelationTable resultRelationTable = relationTable1.union(Arrays.asList(
+            new Variable("A"), new Variable("B"), new Variable("C"), new Variable("D")
+        ), relationTable2);
 
         Assert.assertThat(
             resultRelationTable.getColumnByTitle(new Variable("A")).getColumnValueList().get(0),

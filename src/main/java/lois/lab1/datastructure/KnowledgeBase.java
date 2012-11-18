@@ -212,6 +212,22 @@ public class KnowledgeBase {
         return isSimilarExist;
     }
 
+    public boolean isSignSimilar(AtomSign first, AtomSign second, String similarityName) {
+
+        for (SimilarityRelation similarityRelation : getSimilarityRelationBySign(similarityName)) {
+            boolean isSimilar = (similarityRelation.getArgumentList().get(0).equals(first)
+                && similarityRelation.getArgumentList().get(1).equals(second))
+                || (similarityRelation.getArgumentList().get(0).equals(second)
+                && similarityRelation.getArgumentList().get(1).equals(first));
+
+            if (isSimilar) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Creates similar rule for the given similarity relation.
      *
@@ -240,6 +256,20 @@ public class KnowledgeBase {
 
         return new Rule(similarConsequent, similarReason);
     }
+
+    public Rule findSimilarRuleForPredicate(Rule rule, String similarityName, Predicate predicate) {
+        Rule similarRule = createSimilarRule(rule, similarityName);
+        Rule resultRule = null;
+        if (similarRule != null) {
+
+            if (similarRule.getConsequent().getSign().equals(predicate.getSign())) {
+                resultRule = similarRule;
+            }
+        }
+
+        return resultRule;
+    }
+
 
     /**
      * Creates similar rule for the every rule and every similarity relation.
@@ -271,7 +301,7 @@ public class KnowledgeBase {
      * @return pair list of the found similar rule.
      *         First element - similar rule, second - name of the similarity relation.
      */
-    public List<Pair<Rule, String>> findSimilarRuleForPredicate(Predicate predicate) {
+    public List<Pair<Rule, String>> findAllSimilarRuleForPredicate(Predicate predicate) {
         List<Pair<Rule, String>> resultList = new ArrayList<Pair<Rule, String>>();
 
         List<Pair<Rule, String>> allSimilarRule = createAllSimilarRule();
@@ -279,6 +309,29 @@ public class KnowledgeBase {
 
             if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicate.getSign())) {
                 resultList.add(ruleSimilarityPair);
+            }
+        }
+
+        return resultList;
+    }
+
+    /**
+     * Find all similar rule from the knowledge base for the given predicate and similarity relation name.
+     *
+     * @param predicate predicate to find similar rule
+     * @param similarityName name of similarity relation
+     * @return list of the found similar rule
+     */
+    public List<Rule> findAllSimilarRuleForPredicate(Predicate predicate, String similarityName) {
+        List<Rule> resultList = new ArrayList<Rule>();
+
+        List<Pair<Rule, String>> allSimilarRule = createAllSimilarRule();
+        for (Pair<Rule, String> ruleSimilarityPair : allSimilarRule) {
+
+            if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicate.getSign())
+                && ruleSimilarityPair.getSecond().equals(similarityName)) {
+
+                resultList.add(ruleSimilarityPair.getFirst());
             }
         }
 

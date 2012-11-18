@@ -29,29 +29,35 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
+    public void clearTree() {
+        List<TreeNode> childList = new ArrayList<TreeNode>(children);
+
+        for(TreeNode child : childList) {
+            child.clearTree();
+        }
+
+        if (getChildren().size() == 0 && relationTable.isEmpty()) {
+            getParent().getChildren().remove(this);
+        }
+    }
+
     public RelationTable calculateRelationTable() {
-        RelationTable resultRelationTable = new RelationTable();
+        List<TreeNode> resultChildList = getChildNodeList(false);
+        List<TreeNode> similarChildList = getChildNodeList(true);
 
-        if (children.size() == 0) {
-            return relationTable;
+        if (similarChildList.isEmpty()) {
+            relationTable = calculateRelationTable(resultChildList);
         }
-        else if (type.equals(OR_TYPE)) {
-            resultRelationTable = children.get(0).calculateRelationTable();
-
-            for (int i = 1; i < children.size(); i++) {
-                resultRelationTable = resultRelationTable.union(children.get(i).calculateRelationTable());
-            }
+        else if (resultChildList.isEmpty()) {
+            relationTable = calculateRelationTable(similarChildList);
         }
-        else if (type.equals(AND_TYPE)) {
-            resultRelationTable = children.get(0).calculateRelationTable();
-
-            for (int i = 1; i < children.size(); i++) {
-                resultRelationTable = resultRelationTable.join(children.get(i).calculateRelationTable());
-            }
+        else {
+            relationTable = processSimilarResults(
+                calculateRelationTable(resultChildList), calculateRelationTable(similarChildList), getUsedSimilarityName());
         }
 
-        relationTable = resultRelationTable.projectTo(getNodePredicateVariableList());
         return relationTable;
+        //return null;
     }
 
     /**
@@ -59,29 +65,6 @@ public class TreeNode {
      */
     public void printInferenceTree() {
         printInferenceTreeRec(this, 0);
-    }
-
-    /**
-     * Recursive function that prints tree of the logical inference.
-     *
-     * @param currentNode current node of the tree
-     * @param treeLevel level of the current node in the tree
-     */
-    private void printInferenceTreeRec(TreeNode currentNode, int treeLevel) {
-        String levelIntend = "";
-        for (int i = 0; i < treeLevel; i++) {
-            levelIntend = levelIntend + "\t\t";
-        }
-
-        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
-        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
-        System.out.println(levelIntend + "node type: " + currentNode.getType());
-        System.out.println();
-
-        for (TreeNode childNode : currentNode.getChildren()) {
-            printInferenceTreeRec(childNode, treeLevel + 1);
-        }
     }
 
     public RelationTable getRelationTable() {
@@ -147,5 +130,124 @@ public class TreeNode {
         }
 
         return variableList;
+    }
+
+    private List<TreeNode> getChildNodeList(boolean isForSimilar) {
+        List<TreeNode> resultNodeList = new ArrayList<TreeNode>();
+
+        for (TreeNode child : children) {
+            if (isForSimilar) {
+                if (!child.getSimilarityName().equals("")) {
+                    resultNodeList.add(child);
+                }
+            }
+            else {
+                if (child.getSimilarityName().equals("")) {
+                    resultNodeList.add(child);
+                }
+            }
+        }
+
+        return resultNodeList;
+    }
+
+    /**
+     * Recursive function that prints tree of the logical inference.
+     *
+     * @param currentNode current node of the tree
+     * @param treeLevel level of the current node in the tree
+     */
+    private void printInferenceTreeRec(TreeNode currentNode, int treeLevel) {
+        String levelIntend = "";
+        for (int i = 0; i < treeLevel; i++) {
+            levelIntend = levelIntend + "\t\t";
+        }
+
+        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
+        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
+        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
+        System.out.println(levelIntend + "node type: " + currentNode.getType());
+        System.out.println();
+
+        for (TreeNode childNode : currentNode.getChildren()) {
+            printInferenceTreeRec(childNode, treeLevel + 1);
+        }
+    }
+
+    private RelationTable calculateRelationTable(List<TreeNode> childrenList) {
+        RelationTable resultRelationTable = new RelationTable();
+
+        if (childrenList.size() == 0) {
+            return relationTable;
+        }
+        else if (type.equals(OR_TYPE)) {
+            resultRelationTable = childrenList.get(0).calculateRelationTable();
+
+            for (int i = 1; i < childrenList.size(); i++) {
+                RelationTable childRelationTable =
+                    childrenList.get(i).calculateRelationTable();
+
+                resultRelationTable =
+                    resultRelationTable.union(getNodePredicate().getVariableArgumentList(), childRelationTable);
+            }
+        }
+        else if (type.equals(AND_TYPE)) {
+            resultRelationTable = childrenList.get(0).calculateRelationTable();
+
+            for (int i = 1; i < childrenList.size(); i++) {
+                resultRelationTable = resultRelationTable.join(
+                    childrenList.get(i).calculateRelationTable());
+            }
+        }
+
+        return resultRelationTable.projectTo(getNodePredicateVariableList());
+    }
+
+    private RelationTable processSimilarResults(RelationTable resultsTable, RelationTable similarTable, String similarityName) {
+
+        RelationTable processedTable = new RelationTable(resultsTable.getTitleList());
+
+        for (List<AtomSign> resultRow : resultsTable.getAllRows()) {
+            for (List<AtomSign> similarRow : similarTable.getAllRows()) {
+
+                List<AtomSign> row = processSimilarRow(resultRow, similarRow, similarityName);
+
+                if (row != null) {
+                    processedTable.addRow(resultsTable.getTitleList(), row);
+                }
+            }
+        }
+
+        return processedTable;
+    }
+
+    private List<AtomSign> processSimilarRow(List<AtomSign> resultRow, List<AtomSign> similarRow, String similarityName) {
+        boolean isSimilar = true;
+
+        for (int i = 0; i < resultRow.size(); i++) {
+            if (!KnowledgeBase.getInstance().isSignSimilar(resultRow.get(i), similarRow.get(i), similarityName)) {
+                isSimilar = false;
+            }
+        }
+
+        if (isSimilar) {
+            return resultRow;
+        }
+        else {
+            return null;
+        }
+    }
+
+    private String getUsedSimilarityName() {
+        String nodeSimilarityName = "";
+
+        for (TreeNode child : children) {
+
+            if (!child.getSimilarityName().equals("")) {
+                nodeSimilarityName = child.getSimilarityName();
+            }
+        }
+
+        return nodeSimilarityName;
     }
 }

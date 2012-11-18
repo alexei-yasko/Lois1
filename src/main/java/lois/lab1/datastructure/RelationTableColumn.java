@@ -8,14 +8,14 @@ import java.util.List;
  */
 public class RelationTableColumn {
 
-    private Pair<AtomSign, List<AtomSign>> column;
+    private Pair<Variable, List<AtomSign>> column;
 
-    public RelationTableColumn(AtomSign title) {
-        column = new Pair<AtomSign, List<AtomSign>>(title, new ArrayList<AtomSign>());
+    public RelationTableColumn(Variable title) {
+        column = new Pair<Variable, List<AtomSign>>(title, new ArrayList<AtomSign>());
     }
 
-    public RelationTableColumn(AtomSign title, List<AtomSign> values) {
-        column = new Pair<AtomSign, List<AtomSign>>(title, values);
+    public RelationTableColumn(Variable title, List<AtomSign> values) {
+        column = new Pair<Variable, List<AtomSign>>(title, values);
     }
 
     public void addColumnValue(AtomSign value) {
@@ -30,12 +30,12 @@ public class RelationTableColumn {
         return column.getSecond();
     }
 
-    public AtomSign getColumnTitle() {
+    public Variable getColumnTitle() {
         return column.getFirst();
     }
 
-    public void setColumnTitle(AtomSign title) {
-        column = new Pair<AtomSign, List<AtomSign>>(title, column.getSecond());
+    public void setColumnTitle(Variable title) {
+        column = new Pair<Variable, List<AtomSign>>(title, column.getSecond());
     }
 
     public void addColumnValueList(List<AtomSign> values) {
