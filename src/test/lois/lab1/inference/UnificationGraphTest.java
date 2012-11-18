@@ -132,4 +132,50 @@ public class UnificationGraphTest {
         Assert.assertThat(unificatedPredicate2.getArgumentList().get(0), is((AtomSign) new Variable("X")));
         Assert.assertThat(unificatedPredicate2.getArgumentList().get(1), is((AtomSign) new Variable("X")));
     }
+
+    @Test
+    public void testUnificatorForConstant() {
+        Predicate predicate1 = new Predicate("P", Arrays.asList(
+            new Constant("a"), new Variable("Y")
+        ));
+
+        Predicate predicate2 = new Predicate("K", Arrays.asList(
+            new Variable("Y"), new Variable("Y")
+        ));
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate1, predicate2);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        Predicate unificatedPredicate1 = unificator.getUnificationFor(predicate1);
+        Predicate unificatedPredicate2 = unificator.getUnificationFor(predicate2);
+
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(0), is((AtomSign) new Constant("a")));
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(1), is((AtomSign) new Constant("a")));
+
+        Assert.assertThat(unificatedPredicate1.getArgumentList().get(0), is((AtomSign) new Constant("a")));
+        Assert.assertThat(unificatedPredicate1.getArgumentList().get(1), is((AtomSign) new Constant("a")));
+    }
+
+    @Test
+    public void testUnificatorForConstant2() {
+        Predicate predicate1 = new Predicate("R", Arrays.asList(
+            new Variable("Y"), new Variable("Y")
+        ));
+
+        Predicate predicate2 = new Predicate("R", Arrays.asList(
+            new Constant("a"), new Variable("W")
+        ));
+
+        UnificationGraph unificationGraph = UnificationGraph.create(predicate1, predicate2);
+        Unificator unificator = unificationGraph.buildUnificator();
+
+        Predicate unificatedPredicate1 = unificator.getUnificationFor(predicate1);
+        Predicate unificatedPredicate2 = unificator.getUnificationFor(predicate2);
+
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(0), is((AtomSign) new Constant("a")));
+        Assert.assertThat(unificatedPredicate2.getArgumentList().get(1), is((AtomSign) new Constant("a")));
+
+        Assert.assertThat(unificatedPredicate1.getArgumentList().get(0), is((AtomSign) new Constant("a")));
+        Assert.assertThat(unificatedPredicate1.getArgumentList().get(1), is((AtomSign) new Constant("a")));
+    }
 }

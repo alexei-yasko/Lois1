@@ -149,13 +149,18 @@ public class UnificationGraph {
                 unificator.addElement(
                     new Pair<AtomSign, AtomSign>(edge.getFirstNode().getSign(), connectedToFirstConstNode.getSign()));
             }
-            else if (connectedToSecondConstNode != null) {
+            else {
+                unificator.addElement(
+                    new Pair<AtomSign, AtomSign>(edge.getFirstNode().getSign(), edge.getSecondNode().getSign()));
+            }
+
+            if (connectedToSecondConstNode != null) {
                 unificator.addElement(
                     new Pair<AtomSign, AtomSign>(edge.getSecondNode().getSign(), connectedToSecondConstNode.getSign()));
             }
             else {
                 unificator.addElement(
-                    new Pair<AtomSign, AtomSign>(edge.getFirstNode().getSign(), edge.getSecondNode().getSign()));
+                    new Pair<AtomSign, AtomSign>(edge.getSecondNode().getSign(), edge.getFirstNode().getSign()));
             }
         }
 
@@ -177,11 +182,12 @@ public class UnificationGraph {
     }
 
     private Node getConnectedConstNodeRec(Node node, List<Node> passedNodeList) {
-
-        for (Edge edge : getAdjacentEdges(node)) {
+        List<Edge> adjacentEdges = getAdjacentEdges(node);
+        for (Edge edge : adjacentEdges) {
             Node otherNode = edge.getOther(node);
 
             if (passedNodeList.contains(otherNode)) {
+                passedNodeList.remove(otherNode);
                 continue;
             }
 
@@ -191,7 +197,10 @@ public class UnificationGraph {
                 return otherNode;
             }
             else {
-                return getConnectedConstNodeRec(otherNode, passedNodeList);
+                Node resultNode = getConnectedConstNodeRec(otherNode, passedNodeList);
+                if (resultNode != null && resultNode.getSign().getType() == AtomSignType.CONST) {
+                    return resultNode;
+                }
             }
         }
 
@@ -231,6 +240,13 @@ public class UnificationGraph {
         @Override
         public int hashCode() {
             return sign != null ? sign.hashCode() : 0;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                "sign=" + sign +
+                '}';
         }
     }
 

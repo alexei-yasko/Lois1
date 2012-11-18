@@ -46,15 +46,13 @@ public class Solver {
 
         if (usedPredicate.contains(predicate)) {
             currentNode.getParent().getChildren().remove(currentNode);
-            return currentNode;
+            return currentNode.getParent();
         }
         usedPredicate.add(predicate);
 
         for (Predicate contradiction : knowledgeBase.findLogicallySameFacts(predicate)) {
-            //if (knowledgeBase.isSimilarExist(contradiction, similarityName)) {
-                currentNode.setType(TreeNode.AND_TYPE);
-                currentNode.getRelationTable().addRow(predicate.getVariableArgumentList(), contradiction.getArgumentList());
-            //}
+            currentNode.setType(TreeNode.AND_TYPE);
+            currentNode.getRelationTable().addRow(predicate.getVariableArgumentList(), contradiction.getArgumentList());
         }
 
         List<Rule> ruleList = knowledgeBase.findRuleForPredicate(predicate);
@@ -79,7 +77,7 @@ public class Solver {
                 unifiedNode.setType(TreeNode.AND_TYPE);
 
                 solveRec1(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
-                usedPredicate.remove(unifiedConsequent);
+                usedPredicate.remove(unifiedConsequent.getSign());
             }
         }
 
@@ -93,29 +91,34 @@ public class Solver {
                 List<Predicate> unifiedRulePredicates = unifyRule(predicate, similarRule);
                 Predicate unifiedConsequent = unifyPredicate(similarRule.getConsequent(), predicate);
 
-                TreeNode unifiedNode = null;
-                if (!unifiedRulePredicates.isEmpty()) {
+                if (unifiedConsequent != null) {
+                    Predicate unifiedSimilarPredicate = unifyPredicate(similarPredicatePair.getFirst(), unifiedConsequent);
+
+                    if (unifiedSimilarPredicate == null) {
+                        continue;
+                    }
+
+                    TreeNode unifiedNode = null;
                     unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedConsequent);
                     currentNode.addChild(unifiedNode);
                     currentNode.setType(TreeNode.OR_TYPE);
                     usedPredicate.add(unifyPredicate(similarRule.getConsequent(), predicate));
 
-                    Predicate unifiedSimilarPredicate = unifyPredicate(similarPredicatePair.getFirst(), unifiedConsequent);
                     TreeNode similarPredicateNode =
                         new TreeNode(TreeNode.OR_TYPE, unifiedNode, unifiedSimilarPredicate);
                     similarPredicateNode.setSimilarityName(similarPredicatePair.getSecond());
                     unifiedNode.addChild(similarPredicateNode);
 
                     solveRec1(similarPredicateNode, unifiedSimilarPredicate, similarityName, deep + 1, usedPredicate);
-                }
 
-                for (Predicate nextPredicate : unifiedRulePredicates) {
-                    TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
-                    unifiedNode.addChild(nextNode);
-                    unifiedNode.setType(TreeNode.AND_TYPE);
+                    for (Predicate nextPredicate : unifiedRulePredicates) {
+                        TreeNode nextNode = new TreeNode(TreeNode.OR_TYPE, unifiedNode, nextPredicate);
+                        unifiedNode.addChild(nextNode);
+                        unifiedNode.setType(TreeNode.AND_TYPE);
 
-                    solveRec1(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
-                    usedPredicate.remove(unifiedConsequent);
+                        solveRec1(nextNode, nextPredicate, similarityName, deep + 1, usedPredicate);
+                        usedPredicate.remove(unifiedConsequent);
+                    }
                 }
             }
         }
@@ -251,7 +254,11 @@ public class Solver {
     private Predicate unifyPredicate(Predicate predicateToUnify, Predicate predicate) {
         UnificationGraph unificationGraph = UnificationGraph.create(predicateToUnify, predicate);
         Unificator unificator = unificationGraph.buildUnificator();
-
-        return unificator.getUnificationFor(predicateToUnify);
+        if (unificator != null) {
+            return unificator.getUnificationFor(predicateToUnify);
+        }
+        else {
+            return null;
+        }
     }
 }

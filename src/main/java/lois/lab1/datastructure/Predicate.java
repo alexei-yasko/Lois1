@@ -30,8 +30,8 @@ public class Predicate extends AtomSign {
         return arguments;
     }
 
-    public List<Variable> getVariableArgumentList() {
-        List<Variable> variableArgumentList = new ArrayList<Variable>();
+    public List<AtomSign> getVariableArgumentList() {
+        List<AtomSign> variableArgumentList = new ArrayList<AtomSign>();
         for (AtomSign argument : arguments) {
 
             if (argument.getType() == AtomSignType.VAR) {

@@ -36,7 +36,7 @@ public class TreeNode {
             child.clearTree();
         }
 
-        if (getChildren().size() == 0 && relationTable.isEmpty()) {
+        if (getChildren().size() == 0 && relationTable.isEmpty() && getParent().getType() == TreeNode.OR_TYPE) {
             getParent().getChildren().remove(this);
         }
     }
@@ -119,8 +119,8 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
-    public List<Variable> getNodePredicateVariableList() {
-        List<Variable> variableList = new ArrayList<Variable>();
+    public List<AtomSign> getNodePredicateVariableList() {
+        List<AtomSign> variableList = new ArrayList<AtomSign>();
 
         for (AtomSign atomSign : nodePredicate.getArgumentList()) {
 
@@ -182,21 +182,16 @@ public class TreeNode {
         }
         else if (type.equals(OR_TYPE)) {
             resultRelationTable = childrenList.get(0).calculateRelationTable();
-
             for (int i = 1; i < childrenList.size(); i++) {
-                RelationTable childRelationTable =
-                    childrenList.get(i).calculateRelationTable();
-
-                resultRelationTable =
-                    resultRelationTable.union(getNodePredicate().getVariableArgumentList(), childRelationTable);
+                RelationTable childRelationTable = childrenList.get(i).calculateRelationTable();
+                resultRelationTable = resultRelationTable.union(childRelationTable);
             }
         }
         else if (type.equals(AND_TYPE)) {
             resultRelationTable = childrenList.get(0).calculateRelationTable();
 
             for (int i = 1; i < childrenList.size(); i++) {
-                resultRelationTable = resultRelationTable.join(
-                    childrenList.get(i).calculateRelationTable());
+                resultRelationTable = resultRelationTable.join(childrenList.get(i).calculateRelationTable());
             }
         }
 

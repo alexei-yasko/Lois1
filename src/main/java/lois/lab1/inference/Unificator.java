@@ -23,7 +23,9 @@ public class Unificator {
     }
 
     public void addElement(Pair<AtomSign, AtomSign> element) {
-        unificatorElementList.add(element);
+        if (!unificatorElementList.contains(element)) {
+            unificatorElementList.add(element);
+        }
     }
 
     public AtomSign getUnificationFor(AtomSign sign) {
@@ -101,11 +103,15 @@ public class Unificator {
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
 
             if (element.getFirst().equals(variable) && element.getSecond().getType() == AtomSignType.CONST) {
-                constantList.add(element.getSecond());
+                if (!constantList.contains(element.getSecond())) {
+                    constantList.add(element.getSecond());
+                }
             }
 
             if (element.getSecond().equals(variable) && element.getFirst().getType() == AtomSignType.CONST) {
-                constantList.add(element.getFirst());
+                if (!constantList.contains(element.getFirst())) {
+                    constantList.add(element.getFirst());
+                }
             }
         }
 
