@@ -1,6 +1,10 @@
 package lois.lab1.datastructure;
 
 /**
+ * Pair.
+ *
+ * <p> T - type of the first element, K - type of the second element. </p>
+ *
  * @author Q-YAA
  */
 public class Pair<T, K> {

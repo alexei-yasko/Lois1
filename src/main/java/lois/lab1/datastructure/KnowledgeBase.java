@@ -58,7 +58,7 @@ public class KnowledgeBase {
     /**
      * Finds similarity relation in the knowledge base by the given sign.
      *
-     * @param sign sing to find similarity relation
+     * @param sign sing of the similarity relation
      * @return list of the similarity relation with the given sign
      */
     public List<SimilarityRelation> getSimilarityRelationBySign(String sign) {
@@ -95,7 +95,10 @@ public class KnowledgeBase {
     /**
      * Method that find all possible logically equivalent predicates in knowledge base.
      *
-     * <p> For the predicate unification used {@link lois.lab1.inference.UnificationGraph} and {@link lois.lab1.inference.Unificator} </p>
+     * <p>
+     * For the predicate unification used
+     * {@link lois.lab1.inference.UnificationGraph} and {@link lois.lab1.inference.Unificator}
+     * </p>
      *
      * @param predicate predicate to find logically the same predicates
      * @return logically equivalent predicates
@@ -212,6 +215,14 @@ public class KnowledgeBase {
         return isSimilarExist;
     }
 
+    /**
+     * Determines if first sign similar to the second sign with similarity relation with the given name.
+     *
+     * @param first first atom sign
+     * @param second second atom sign
+     * @param similarityName name of the similarity relation
+     * @return true - if first similar to the second sign, false in the other case
+     */
     public boolean isSignSimilar(AtomSign first, AtomSign second, String similarityName) {
 
         for (SimilarityRelation similarityRelation : getSimilarityRelationBySign(similarityName)) {
@@ -257,20 +268,6 @@ public class KnowledgeBase {
         return new Rule(similarConsequent, similarReason);
     }
 
-    public Rule findSimilarRuleForPredicate(Rule rule, String similarityName, Predicate predicate) {
-        Rule similarRule = createSimilarRule(rule, similarityName);
-        Rule resultRule = null;
-        if (similarRule != null) {
-
-            if (similarRule.getConsequent().getSign().equals(predicate.getSign())) {
-                resultRule = similarRule;
-            }
-        }
-
-        return resultRule;
-    }
-
-
     /**
      * Creates similar rule for the every rule and every similarity relation.
      *
@@ -292,50 +289,6 @@ public class KnowledgeBase {
         }
 
         return similarityRuleList;
-    }
-
-    /**
-     * Find all similar rule from the knowledge base for the given predicate.
-     *
-     * @param predicate predicate to find similar rule
-     * @return pair list of the found similar rule.
-     *         First element - similar rule, second - name of the similarity relation.
-     */
-    public List<Pair<Rule, String>> findAllSimilarRuleForPredicate(Predicate predicate) {
-        List<Pair<Rule, String>> resultList = new ArrayList<Pair<Rule, String>>();
-
-        List<Pair<Rule, String>> allSimilarRule = createAllSimilarRule();
-        for (Pair<Rule, String> ruleSimilarityPair : allSimilarRule) {
-
-            if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicate.getSign())) {
-                resultList.add(ruleSimilarityPair);
-            }
-        }
-
-        return resultList;
-    }
-
-    /**
-     * Find all similar rule from the knowledge base for the given predicate and similarity relation name.
-     *
-     * @param predicate predicate to find similar rule
-     * @param similarityName name of similarity relation
-     * @return list of the found similar rule
-     */
-    public List<Rule> findAllSimilarRuleForPredicate(Predicate predicate, String similarityName) {
-        List<Rule> resultList = new ArrayList<Rule>();
-
-        List<Pair<Rule, String>> allSimilarRule = createAllSimilarRule();
-        for (Pair<Rule, String> ruleSimilarityPair : allSimilarRule) {
-
-            if (ruleSimilarityPair.getFirst().getConsequent().getSign().equals(predicate.getSign())
-                && ruleSimilarityPair.getSecond().equals(similarityName)) {
-
-                resultList.add(ruleSimilarityPair.getFirst());
-            }
-        }
-
-        return resultList;
     }
 
     /**

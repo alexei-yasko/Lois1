@@ -33,9 +33,9 @@ options {
     public static void main(String[] args) throws Exception {
     	
         //String baseFile = args[0];
-        String baseFile = "knowledgeBase/knowledgeBase.txt";
+        String baseFile = "knowledgeBase/knowledgeBase_0.txt";
         //String goalFile = args[1];
-        String goalFile = "knowledgeBase/goal.txt";
+        String goalFile = "knowledgeBase/goal_0.txt";
 
         List<String> argumentsList = new ArrayList<String>();
         for (String arg : args) {

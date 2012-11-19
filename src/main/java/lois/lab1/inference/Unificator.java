@@ -9,6 +9,8 @@ import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
 
 /**
+ * Class that present unificator.
+ *
  * @author Q-YAA
  */
 public class Unificator {
@@ -22,12 +24,23 @@ public class Unificator {
         this.unificatorElementList = unificatorElementList;
     }
 
+    /**
+     * Adds elemnt to the unificator.
+     *
+     * @param element element to add
+     */
     public void addElement(Pair<AtomSign, AtomSign> element) {
         if (!unificatorElementList.contains(element)) {
             unificatorElementList.add(element);
         }
     }
 
+    /**
+     * Finds unification for the given sing.
+     *
+     * @param sign sign to find unification
+     * @return unification for the sign
+     */
     public AtomSign getUnificationFor(AtomSign sign) {
         AtomSign unificationResult = findUnificationForAtomSignWithType(sign, AtomSignType.CONST);
 
@@ -38,6 +51,12 @@ public class Unificator {
         return unificationResult;
     }
 
+    /**
+     * Finds unification for the predicate.
+     *
+     * @param predicate predicate to find unification
+     * @return unification for the predicate
+     */
     public Predicate getUnificationFor(Predicate predicate) {
         List<AtomSign> unifitedPredicateArgList = new ArrayList<AtomSign>();
 
@@ -54,6 +73,11 @@ public class Unificator {
         return new Predicate(predicate.getSign(), unifitedPredicateArgList);
     }
 
+    /**
+     * Check if it unificator valid.
+     *
+     * @return true - if unificator valid, false - if unificator invalid.
+     */
     public boolean isValid() {
         boolean isValid = true;
 
@@ -69,11 +93,15 @@ public class Unificator {
 
         for (Pair<AtomSign, AtomSign> element : unificatorElementList) {
 
-            if (element.getFirst().getType() == AtomSignType.VAR && !isVariableHasOneConstantUnification(element.getFirst())) {
+            if (element.getFirst().getType() == AtomSignType.VAR
+                && !isVariableHasOneConstantUnification(element.getFirst())) {
+
                 isValid = false;
             }
 
-            if (element.getSecond().getType() == AtomSignType.VAR && !isVariableHasOneConstantUnification(element.getSecond())) {
+            if (element.getSecond().getType() == AtomSignType.VAR
+                && !isVariableHasOneConstantUnification(element.getSecond())) {
+
                 isValid = false;
             }
         }

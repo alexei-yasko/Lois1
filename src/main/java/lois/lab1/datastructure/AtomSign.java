@@ -1,6 +1,8 @@
 package lois.lab1.datastructure;
 
 /**
+ * Atom sign. General class for each logical element.
+ *
  * @author Svet
  */
 public abstract class AtomSign {

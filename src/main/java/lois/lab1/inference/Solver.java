@@ -40,8 +40,6 @@ public class Solver {
                 solveRec2(new TreeNode(TreeNode.OR_TYPE, null, predicate), predicate, 0, new ArrayList<String>());
 
             rootNode.calculateRelationTable();
-            rootNode.printInferenceTree();
-
             resultList.add(rootNode);
         }
 
@@ -73,10 +71,12 @@ public class Solver {
                 continue;
             }
 
+            // append unified consequent of the used rule
             TreeNode unifiedNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedRule.getConsequent());
             currentNode.addChild(unifiedNode);
             currentNode.setType(TreeNode.OR_TYPE);
 
+            // append all unified reason of the used rule
             for (Predicate reason : unifiedRule.getReason()) {
                 TreeNode reasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedNode, reason);
                 unifiedNode.addChild(reasonNode);
@@ -104,10 +104,12 @@ public class Solver {
                     continue;
                 }
 
+                // append unified consequent of the used similar rule
                 TreeNode unifiedSimilarNode = new TreeNode(TreeNode.AND_TYPE, currentNode, unifiedSimilarRule.getConsequent());
                 currentNode.addChild(unifiedSimilarNode);
                 currentNode.setType(TreeNode.OR_TYPE);
 
+                // append all unified reason of the used similar rule
                 for (Predicate similarReason : unifiedSimilarRule.getReason()) {
                     TreeNode similarReasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedSimilarNode, similarReason);
                     unifiedSimilarNode.addChild(similarReasonNode);
@@ -129,6 +131,13 @@ public class Solver {
         return currentNode;
     }
 
+    /**
+     * Creates row for relation table from predicate and them contradiction.
+     *
+     * @param predicate predicate to build row of the relation table
+     * @param contradiction contradiction of the given predicate
+     * @return row for relation table (first element - titles of the row, second element - values of the row)
+     */
     private Pair<List<AtomSign>, List<AtomSign>> createRowForContradiction(Predicate predicate, Predicate contradiction) {
         Pair<List<AtomSign>, List<AtomSign>> row =
             new Pair<List<AtomSign>, List<AtomSign>>(new ArrayList<AtomSign>(), new ArrayList<AtomSign>());
@@ -147,9 +156,9 @@ public class Solver {
     /**
      * Method for the rule unification.
      *
-     * @param predicate predicate for the which it unified.
+     * @param predicate predicate for which it unified.
      * @param rule rule to unify
-     * @return unified predicate list from the right part of the rule
+     * @return unified rule or null if unification impossible
      */
     private Rule unifyRule(Predicate predicate, Rule rule) {
         List<Predicate> resultList = new ArrayList<Predicate>();
@@ -178,23 +187,5 @@ public class Solver {
         }
 
         return new Rule(ruleConsequentUnification, resultList);
-    }
-
-    /**
-     * Method that unify one predicate with another.
-     *
-     * @param predicateToUnify predicate to be unified
-     * @param predicate another predicate for unification
-     * @return unified predicate
-     */
-    private Predicate unifyPredicate(Predicate predicateToUnify, Predicate predicate) {
-        UnificationGraph unificationGraph = UnificationGraph.create(predicateToUnify, predicate);
-        Unificator unificator = unificationGraph.buildUnificator();
-        if (unificator != null) {
-            return unificator.getUnificationFor(predicateToUnify);
-        }
-        else {
-            return null;
-        }
     }
 }

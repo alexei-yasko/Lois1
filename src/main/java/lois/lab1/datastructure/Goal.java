@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class that present goal. Contain predicate terms.
+ *
  * @author Svet
  */
 public class Goal {

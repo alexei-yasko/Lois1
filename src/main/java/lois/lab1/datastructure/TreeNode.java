@@ -29,18 +29,6 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
-    public void clearTree() {
-        List<TreeNode> childList = new ArrayList<TreeNode>(children);
-
-        for(TreeNode child : childList) {
-            child.clearTree();
-        }
-
-        if (getChildren().size() == 0 && relationTable.isEmpty() && getParent().getType() == TreeNode.OR_TYPE) {
-            getParent().getChildren().remove(this);
-        }
-    }
-
     public RelationTable calculateRelationTable() {
         List<TreeNode> resultChildList = getChildNodeList(false);
         List<TreeNode> similarChildList = getChildNodeList(true);
@@ -70,10 +58,6 @@ public class TreeNode {
         return relationTable;
     }
 
-    public void setRelationTable(RelationTable relationTable) {
-        this.relationTable = relationTable;
-    }
-
     public void addChild(TreeNode child) {
         this.children.add(child);
     }
@@ -82,16 +66,8 @@ public class TreeNode {
         return children;
     }
 
-    public void setChildren(List<TreeNode> children) {
-        this.children = children;
-    }
-
     public TreeNode getParent() {
         return parent;
-    }
-
-    public void setParent(TreeNode parent) {
-        this.parent = parent;
     }
 
     public String getType() {
@@ -112,10 +88,6 @@ public class TreeNode {
 
     public Predicate getNodePredicate() {
         return nodePredicate;
-    }
-
-    public void setNodePredicate(Predicate nodePredicate) {
-        this.nodePredicate = nodePredicate;
     }
 
     public List<AtomSign> getNodePredicateVariableList() {
@@ -169,12 +141,6 @@ public class TreeNode {
         resultBuilder.append(levelIntend).append("similarity relation: ").append(currentNode.getSimilarityName()).append("\n");
         resultBuilder.append(levelIntend).append("node type: ").append(currentNode.getType()).append("\n");
         resultBuilder.append("\n");
-
-//        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-//        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
-//        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
-//        System.out.println(levelIntend + "node type: " + currentNode.getType());
-//        System.out.println();
 
         for (TreeNode childNode : currentNode.getChildren()) {
             resultBuilder.append(printInferenceTreeRec(childNode, treeLevel + 1));

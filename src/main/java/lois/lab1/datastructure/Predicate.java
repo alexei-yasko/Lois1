@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Predicate.
+ *
  * @author Svet
  */
 public class Predicate extends AtomSign {
 
+    /**
+     * List of the predicate arguments.
+     */
     private List<AtomSign> arguments = new ArrayList<AtomSign>();
 
     public Predicate(String sign) {
@@ -42,6 +47,16 @@ public class Predicate extends AtomSign {
         return variableArgumentList;
     }
 
+    /**
+     * Determines if the predicate logically equivalent to the other.
+     *
+     * <p>
+     * For example F(X, Y) equivalent to the F(a, b).
+     * </p>
+     *
+     * @param otherPredicate other predicate
+     * @return true - if predicate equivalent, false in the other case
+     */
     public boolean isLogicallyEquivalent(Predicate otherPredicate) {
         if (this.equals(otherPredicate)) {
             return true;

@@ -1,6 +1,8 @@
 package lois.lab1.datastructure;
 
 /**
+ * Constant.
+ *
  * @author Svet
  */
 public class Constant extends AtomSign {

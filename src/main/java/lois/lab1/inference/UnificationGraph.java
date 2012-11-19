@@ -9,7 +9,7 @@ import lois.lab1.datastructure.Pair;
 import lois.lab1.datastructure.Predicate;
 
 /**
- * Graph class for unification propose.
+ * Graph for unification propose.
  *
  * @author Q-YAA
  */
@@ -81,23 +81,6 @@ public class UnificationGraph {
     }
 
     /**
-     * Return node by the given sign.
-     *
-     * @param sign sign to find
-     * @return found node or null
-     */
-    public Node getNodeBySign(AtomSign sign) {
-        for (Node node : nodeList) {
-
-            if (node.getSign().equals(sign)) {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Return all edges that adjacent for given node.
      *
      * @param node node to find
@@ -113,24 +96,6 @@ public class UnificationGraph {
         }
 
         return adjacentEdges;
-    }
-
-    /**
-     * Return edge that connect two given nodes.
-     *
-     * @param node1 first node
-     * @param node2 second node
-     * @return found edge or null
-     */
-    public Edge getEdge(Node node1, Node node2) {
-        for (Edge edge : edgeList) {
-
-            if (edge.isConnectedTo(node1, node2)) {
-                return edge;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -207,6 +172,9 @@ public class UnificationGraph {
         return null;
     }
 
+    /**
+     * Class that present node for the graph.
+     */
     public class Node {
 
         private AtomSign sign;
@@ -250,6 +218,9 @@ public class UnificationGraph {
         }
     }
 
+    /**
+     * Class that present edge  for the graph.
+     */
     public class Edge {
 
         private Node firstNode;
