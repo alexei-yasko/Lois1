@@ -62,8 +62,8 @@ public class TreeNode {
     /**
      * Prints tree of the logical inference.
      */
-    public void printInferenceTree() {
-        printInferenceTreeRec(this, 0);
+    public String printInferenceTree() {
+        return printInferenceTreeRec(this, 0);
     }
 
     public RelationTable getRelationTable() {
@@ -156,21 +156,31 @@ public class TreeNode {
      * @param currentNode current node of the tree
      * @param treeLevel level of the current node in the tree
      */
-    private void printInferenceTreeRec(TreeNode currentNode, int treeLevel) {
+    private String printInferenceTreeRec(TreeNode currentNode, int treeLevel) {
+        StringBuilder resultBuilder = new StringBuilder();
+
         String levelIntend = "";
         for (int i = 0; i < treeLevel; i++) {
             levelIntend = levelIntend + "\t\t";
         }
 
-        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
-        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
-        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
-        System.out.println(levelIntend + "node type: " + currentNode.getType());
-        System.out.println();
+        resultBuilder.append(levelIntend).append("^").append(currentNode.getNodePredicate()).append("\n");
+        resultBuilder.append(levelIntend).append("values: ").append(currentNode.getRelationTable()).append("\n");
+        resultBuilder.append(levelIntend).append("similarity relation: ").append(currentNode.getSimilarityName()).append("\n");
+        resultBuilder.append(levelIntend).append("node type: ").append(currentNode.getType()).append("\n");
+        resultBuilder.append("\n");
+
+//        System.out.println(levelIntend + "^" + currentNode.getNodePredicate());
+//        System.out.println(levelIntend + "values: " + currentNode.getRelationTable());
+//        System.out.println(levelIntend + "similarity relation: " + currentNode.getSimilarityName());
+//        System.out.println(levelIntend + "node type: " + currentNode.getType());
+//        System.out.println();
 
         for (TreeNode childNode : currentNode.getChildren()) {
-            printInferenceTreeRec(childNode, treeLevel + 1);
+            resultBuilder.append(printInferenceTreeRec(childNode, treeLevel + 1));
         }
+
+        return resultBuilder.toString();
     }
 
     private RelationTable calculateRelationTable(List<TreeNode> childrenList) {

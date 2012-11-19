@@ -29,8 +29,11 @@ public class Solver {
      * Creates tree of the logical inference.
      *
      * @param goal inference goal
+     * @return list of the root node from inference tree for every goal term
      */
-    public void solve(Goal goal) {
+    public List<TreeNode> solve(Goal goal) {
+        List<TreeNode> resultList = new ArrayList<TreeNode>();
+
         for (Predicate predicate : goal.getGoalTermList()) {
 
             TreeNode rootNode =
@@ -38,10 +41,14 @@ public class Solver {
 
             rootNode.calculateRelationTable();
             rootNode.printInferenceTree();
+
+            resultList.add(rootNode);
         }
+
+        return resultList;
     }
 
-    public TreeNode solveRec2(TreeNode currentNode, Predicate predicate, int deep, List<String> usedPredicates) {
+    public TreeNode solveRec2(TreeNode currentNode, Predicate predicate, int level, List<String> usedPredicates) {
 
         // find contradictions
         List<Predicate> contradictionList = knowledgeBase.findLogicallySameFacts(predicate);
@@ -74,7 +81,7 @@ public class Solver {
                 TreeNode reasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedNode, reason);
                 unifiedNode.addChild(reasonNode);
                 usedPredicates.add(unifiedRule.getConsequent().getSign());
-                solveRec2(reasonNode, reason, deep + 1, usedPredicates);
+                solveRec2(reasonNode, reason, level + 1, usedPredicates);
                 usedPredicates.remove(unifiedRule.getConsequent().getSign());
             }
         }
@@ -105,7 +112,7 @@ public class Solver {
                     TreeNode similarReasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedSimilarNode, similarReason);
                     unifiedSimilarNode.addChild(similarReasonNode);
                     usedPredicates.add(unifiedSimilarRule.getConsequent().getSign());
-                    solveRec2(similarReasonNode, similarReason, deep + 1, usedPredicates);
+                    solveRec2(similarReasonNode, similarReason, level + 1, usedPredicates);
                     usedPredicates.remove(unifiedSimilarRule.getConsequent().getSign());
                 }
 
@@ -114,7 +121,7 @@ public class Solver {
                     new TreeNode(TreeNode.AND_TYPE, unifiedSimilarNode, similarPredicatePair.getFirst());
                 similarPredicateNode.setSimilarityName(similarPredicatePair.getSecond());
                 unifiedSimilarNode.addChild(similarPredicateNode);
-                solveRec2(similarPredicateNode, similarPredicatePair.getFirst(), deep + 1, usedPredicates);
+                solveRec2(similarPredicateNode, similarPredicatePair.getFirst(), level + 1, usedPredicates);
             }
         }
 

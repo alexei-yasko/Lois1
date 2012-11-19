@@ -1,8 +1,9 @@
 // $ANTLR 3.2 Sep 23, 2009 12:02:23 D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g 2012-10-04 10:31:31
 
-    package lois.lab1.parser.output;    
-	
-	import lois.lab1.datastructure.Variable;
+    package lois.lab1.parser.output;
+
+	import lois.lab1.datastructure.TreeNode;
+    import lois.lab1.datastructure.Variable;
 	import lois.lab1.datastructure.Constant;
 	import lois.lab1.datastructure.AtomSign;
 	import lois.lab1.datastructure.Predicate;
@@ -14,8 +15,8 @@
 
 
     import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
+
+    import java.util.List;
 import java.util.ArrayList;
 
 public class LogicLanguageParser extends Parser {
@@ -44,9 +45,9 @@ public class LogicLanguageParser extends Parser {
         }
         public LogicLanguageParser(TokenStream input, RecognizerSharedState state) {
             super(input, state);
-             
+
         }
-        
+
 
     public String[] getTokenNames() { return LogicLanguageParser.tokenNames; }
     public String getGrammarFileName() { return "D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g"; }
@@ -54,30 +55,44 @@ public class LogicLanguageParser extends Parser {
 
 
     	private static List<String> errorList = new ArrayList<String>();
-    	
+
     	private int errorLine;
-    	
+
     	private static Goal goal;
 
         public static void main(String[] args) throws Exception {
-        	
-    		//String codeFile = args[0];
+
+    		//String baseFile = args[0];
         	String baseFile = "knowledgeBase/knowledgeBase.txt";
         	//String goalFile = args[1];
         	String goalFile = "knowledgeBase/goal.txt";
+
+            boolean isShowTree = false;
+            if ((args.length > 3 && (args[2].equals("-t") || args[3].equals("-t")))
+                || (args.length > 2 && args[2].equals("-t"))) {
+
+                isShowTree = true;
+            }
+
+            boolean isInFile = false;
+            if ((args.length > 3 && (args[2].equals("-f") || args[3].equals("-f")))
+                 || (args.length > 2 && args[2].equals("-f"))) {
+
+                 isInFile = true;
+            }
 
     		//CharStream input = new ANTLRFileStream(args[0]);
     		LogicLanguageLexer lexer = new LogicLanguageLexer(new ANTLRFileStream(baseFile));
             LogicLanguageParser parser = new LogicLanguageParser(new CommonTokenStream(lexer));
             parser.base();
-            
+
             lexer = new LogicLanguageLexer(new ANTLRFileStream(goalFile));
             parser = new LogicLanguageParser(new CommonTokenStream(lexer));
             parser.goal();
-            
+
             if (!errorList.isEmpty()) {
             	System.out.println("Next errors was found: ");
-                
+
                 for (String error : errorList) {
                 	System.out.println(error);
                 }
@@ -86,9 +101,28 @@ public class LogicLanguageParser extends Parser {
                 System.out.println(KnowledgeBase.getInstance().toString());
 
                 Solver solver = new Solver(KnowledgeBase.getInstance());
-                solver.solve(goal);
+                List<TreeNode> solutionList = solver.solve(goal);
+
+                for (TreeNode rootNode : solutionList) {
+                    String resultTable = rootNode.getRelationTable().printRelationTable();
+                    String tree = rootNode.printInferenceTree();
+
+                    showResult(resultTable, tree, isInFile, isShowTree);
+                }
            	}
        	}
+
+        private static void showResult(String resultTable, String tree, boolean isInFile, boolean isShowTree) {
+            if (isInFile) {
+
+            }
+            else {
+                System.out.println(resultTable);
+                if (isShowTree) {
+                    System.out.println(tree);
+                }
+            }
+        }
 
         public String getErrorHeader(RecognitionException e) {
             errorLine = e.line;
@@ -217,7 +251,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             KnowledgeBase.getInstance().addRule(first); 
+             KnowledgeBase.getInstance().addRule(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:83:2: (second= rule )*
             loop3:
             do {
@@ -238,7 +272,7 @@ public class LogicLanguageParser extends Parser {
 
             	    state._fsp--;
 
-            	     KnowledgeBase.getInstance().addRule(second); 
+            	     KnowledgeBase.getInstance().addRule(second);
 
             	    }
             	    break;
@@ -282,14 +316,14 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-            match(input,8,FOLLOW_8_in_rule114); 
+            match(input,8,FOLLOW_8_in_rule114);
             pushFollow(FOLLOW_predicateTermList_in_rule116);
             predicateTermList2=predicateTermList();
 
             state._fsp--;
 
-            match(input,9,FOLLOW_9_in_rule118); 
-             object = new Rule(predicateTerm1, predicateTermList2); 
+            match(input,9,FOLLOW_9_in_rule118);
+             object = new Rule(predicateTerm1, predicateTermList2);
 
             }
 
@@ -341,7 +375,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     KnowledgeBase.getInstance().addPredicate(predicateFact3); 
+                     KnowledgeBase.getInstance().addPredicate(predicateFact3);
 
                     }
                     break;
@@ -353,7 +387,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     KnowledgeBase.getInstance().addSimilarityRelation(similarityRelation4); 
+                     KnowledgeBase.getInstance().addSimilarityRelation(similarityRelation4);
 
                     }
                     break;
@@ -395,8 +429,8 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-            match(input,9,FOLLOW_9_in_similarityRelation164); 
-             object = new SimilarityRelation(similarityName5, (similarityPair6!=null?similarityPair6.firstObject:null), (similarityPair6!=null?similarityPair6.secondObject:null)); 
+            match(input,9,FOLLOW_9_in_similarityRelation164);
+             object = new SimilarityRelation(similarityName5, (similarityPair6!=null?similarityPair6.firstObject:null), (similarityPair6!=null?similarityPair6.secondObject:null));
 
             }
 
@@ -463,10 +497,10 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     
-                    		retval.firstObject = new Predicate((predicateNamePair7!=null?predicateNamePair7.firstName:null)); 
+
+                    		retval.firstObject = new Predicate((predicateNamePair7!=null?predicateNamePair7.firstName:null));
                     		retval.secondObject = new Predicate((predicateNamePair7!=null?predicateNamePair7.secondName:null));
-                    	
+
 
                     }
                     break;
@@ -478,7 +512,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     retval.firstObject = (constantPair8!=null?constantPair8.firstObject:null); retval.secondObject = (constantPair8!=null?constantPair8.secondObject:null); 
+                     retval.firstObject = (constantPair8!=null?constantPair8.firstObject:null); retval.secondObject = (constantPair8!=null?constantPair8.secondObject:null);
 
                     }
                     break;
@@ -517,20 +551,20 @@ public class LogicLanguageParser extends Parser {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:2: ( '(' first= predicateName ',' second= predicateName ')' )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:110:4: '(' first= predicateName ',' second= predicateName ')'
             {
-            match(input,10,FOLLOW_10_in_predicateNamePair212); 
+            match(input,10,FOLLOW_10_in_predicateNamePair212);
             pushFollow(FOLLOW_predicateName_in_predicateNamePair216);
             first=predicateName();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_predicateNamePair218); 
+            match(input,11,FOLLOW_11_in_predicateNamePair218);
             pushFollow(FOLLOW_predicateName_in_predicateNamePair222);
             second=predicateName();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_predicateNamePair224); 
-             retval.firstName = first; retval.secondName = second; 
+            match(input,12,FOLLOW_12_in_predicateNamePair224);
+             retval.firstName = first; retval.secondName = second;
 
             }
 
@@ -567,20 +601,20 @@ public class LogicLanguageParser extends Parser {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:2: ( '(' first= constant ',' second= constant ')' )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:114:4: '(' first= constant ',' second= constant ')'
             {
-            match(input,10,FOLLOW_10_in_constantPair242); 
+            match(input,10,FOLLOW_10_in_constantPair242);
             pushFollow(FOLLOW_constant_in_constantPair246);
             first=constant();
 
             state._fsp--;
 
-            match(input,11,FOLLOW_11_in_constantPair248); 
+            match(input,11,FOLLOW_11_in_constantPair248);
             pushFollow(FOLLOW_constant_in_constantPair252);
             second=constant();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_constantPair254); 
-             retval.firstObject = first; retval.secondObject = second; 
+            match(input,12,FOLLOW_12_in_constantPair254);
+             retval.firstObject = first; retval.secondObject = second;
 
             }
 
@@ -617,15 +651,15 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-            match(input,10,FOLLOW_10_in_predicateFact277); 
+            match(input,10,FOLLOW_10_in_predicateFact277);
             pushFollow(FOLLOW_constList_in_predicateFact279);
             constList10=constList();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_predicateFact281); 
-            match(input,9,FOLLOW_9_in_predicateFact283); 
-             object = new Predicate(predicateName9, constList10); 
+            match(input,12,FOLLOW_12_in_predicateFact281);
+            match(input,9,FOLLOW_9_in_predicateFact283);
+             object = new Predicate(predicateName9, constList10);
 
             }
 
@@ -651,7 +685,7 @@ public class LogicLanguageParser extends Parser {
         Constant second = null;
 
 
-         list = new ArrayList<Constant>(); 
+         list = new ArrayList<Constant>();
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:2: (first= constant ( ',' second= constant )* )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:4: first= constant ( ',' second= constant )*
@@ -661,7 +695,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             list.add(first); 
+             list.add(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:49: ( ',' second= constant )*
             loop6:
             do {
@@ -677,13 +711,13 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:124:50: ',' second= constant
             	    {
-            	    match(input,11,FOLLOW_11_in_constList313); 
+            	    match(input,11,FOLLOW_11_in_constList313);
             	    pushFollow(FOLLOW_constant_in_constList317);
             	    second=constant();
 
             	    state._fsp--;
 
-            	     list.add(second); 
+            	     list.add(second);
 
             	    }
             	    break;
@@ -718,7 +752,7 @@ public class LogicLanguageParser extends Parser {
         Predicate second = null;
 
 
-         list = new ArrayList<Predicate>(); 
+         list = new ArrayList<Predicate>();
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:2: (first= predicateTerm ( ';' second= predicateTerm )* )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:4: first= predicateTerm ( ';' second= predicateTerm )*
@@ -728,7 +762,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             list.add(first); 
+             list.add(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:54: ( ';' second= predicateTerm )*
             loop7:
             do {
@@ -744,13 +778,13 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:129:55: ';' second= predicateTerm
             	    {
-            	    match(input,13,FOLLOW_13_in_predicateTermList350); 
+            	    match(input,13,FOLLOW_13_in_predicateTermList350);
             	    pushFollow(FOLLOW_predicateTerm_in_predicateTermList354);
             	    second=predicateTerm();
 
             	    state._fsp--;
 
-            	     list.add(second); 
+            	     list.add(second);
 
             	    }
             	    break;
@@ -794,14 +828,14 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-            match(input,10,FOLLOW_10_in_predicateTerm377); 
+            match(input,10,FOLLOW_10_in_predicateTerm377);
             pushFollow(FOLLOW_argumentList_in_predicateTerm379);
             argumentList12=argumentList();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_predicateTerm381); 
-             object = new Predicate(predicateName11, argumentList12); 
+            match(input,12,FOLLOW_12_in_predicateTerm381);
+             object = new Predicate(predicateName11, argumentList12);
 
             }
 
@@ -827,7 +861,7 @@ public class LogicLanguageParser extends Parser {
         AtomSign second = null;
 
 
-         list = new ArrayList<AtomSign>(); 
+         list = new ArrayList<AtomSign>();
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:2: (first= argument ( ',' second= argument )* )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:4: first= argument ( ',' second= argument )*
@@ -837,7 +871,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             list.add(first); 
+             list.add(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:49: ( ',' second= argument )*
             loop8:
             do {
@@ -853,13 +887,13 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:138:50: ',' second= argument
             	    {
-            	    match(input,11,FOLLOW_11_in_argumentList412); 
+            	    match(input,11,FOLLOW_11_in_argumentList412);
             	    pushFollow(FOLLOW_argument_in_argumentList416);
             	    second=argument();
 
             	    state._fsp--;
 
-            	     list.add(second); 
+            	     list.add(second);
 
             	    }
             	    break;
@@ -920,7 +954,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     object = constant13; 
+                     object = constant13;
 
                     }
                     break;
@@ -932,7 +966,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     object = variable14; 
+                     object = variable14;
 
                     }
                     break;
@@ -965,7 +999,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             goal = new Goal(goalTermList15); 
+             goal = new Goal(goalTermList15);
 
             }
 
@@ -991,7 +1025,7 @@ public class LogicLanguageParser extends Parser {
         Predicate second = null;
 
 
-         list = new ArrayList<Predicate>(); 
+         list = new ArrayList<Predicate>();
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:2: (first= goalTerm ( ';' second= goalTerm )* )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:4: first= goalTerm ( ';' second= goalTerm )*
@@ -1001,7 +1035,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             list.add(first); 
+             list.add(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:49: ( ';' second= goalTerm )*
             loop10:
             do {
@@ -1017,13 +1051,13 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:152:50: ';' second= goalTerm
             	    {
-            	    match(input,13,FOLLOW_13_in_goalTermList486); 
+            	    match(input,13,FOLLOW_13_in_goalTermList486);
             	    pushFollow(FOLLOW_goalTerm_in_goalTermList490);
             	    second=goalTerm();
 
             	    state._fsp--;
 
-            	     list.add(second); 
+            	     list.add(second);
 
             	    }
             	    break;
@@ -1067,7 +1101,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-            match(input,10,FOLLOW_10_in_goalTerm511); 
+            match(input,10,FOLLOW_10_in_goalTerm511);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:156:22: ( goalArgumentList )?
             int alt11=2;
             int LA11_0 = input.LA(1);
@@ -1090,8 +1124,8 @@ public class LogicLanguageParser extends Parser {
 
             }
 
-            match(input,12,FOLLOW_12_in_goalTerm516); 
-             object = new Predicate(predicateName16, goalArgumentList17); 
+            match(input,12,FOLLOW_12_in_goalTerm516);
+             object = new Predicate(predicateName16, goalArgumentList17);
 
             }
 
@@ -1117,7 +1151,7 @@ public class LogicLanguageParser extends Parser {
         AtomSign second = null;
 
 
-         list = new ArrayList<AtomSign>(); 
+         list = new ArrayList<AtomSign>();
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:2: (first= goalArgument ( ',' second= goalArgument )* )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:4: first= goalArgument ( ',' second= goalArgument )*
@@ -1127,7 +1161,7 @@ public class LogicLanguageParser extends Parser {
 
             state._fsp--;
 
-             list.add(first); 
+             list.add(first);
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:53: ( ',' second= goalArgument )*
             loop12:
             do {
@@ -1143,13 +1177,13 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:161:54: ',' second= goalArgument
             	    {
-            	    match(input,11,FOLLOW_11_in_goalArgumentList545); 
+            	    match(input,11,FOLLOW_11_in_goalArgumentList545);
             	    pushFollow(FOLLOW_goalArgument_in_goalArgumentList549);
             	    second=goalArgument();
 
             	    state._fsp--;
 
-            	     list.add(second); 
+            	     list.add(second);
 
             	    }
             	    break;
@@ -1203,8 +1237,8 @@ public class LogicLanguageParser extends Parser {
                 case 1 :
                     // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:165:4: '?'
                     {
-                    match(input,14,FOLLOW_14_in_goalArgument567); 
-                     object = new Variable("?"); 
+                    match(input,14,FOLLOW_14_in_goalArgument567);
+                     object = new Variable("?");
 
                     }
                     break;
@@ -1216,7 +1250,7 @@ public class LogicLanguageParser extends Parser {
 
                     state._fsp--;
 
-                     object = argument18; 
+                     object = argument18;
 
                     }
                     break;
@@ -1241,7 +1275,7 @@ public class LogicLanguageParser extends Parser {
 
         Token LOWER_SYMBOL19=null;
 
-         name = ""; 
+         name = "";
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:2: ( ( LOWER_SYMBOL )+ )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:4: ( LOWER_SYMBOL )+
@@ -1262,8 +1296,8 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:171:5: LOWER_SYMBOL
             	    {
-            	    LOWER_SYMBOL19=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_similarityName598); 
-            	     name = name + LOWER_SYMBOL19.getText(); 
+            	    LOWER_SYMBOL19=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_similarityName598);
+            	     name = name + LOWER_SYMBOL19.getText();
 
             	    }
             	    break;
@@ -1299,7 +1333,7 @@ public class LogicLanguageParser extends Parser {
 
         Token UPPER_SYMBOL20=null;
 
-         name = ""; 
+         name = "";
         try {
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:2: ( ( UPPER_SYMBOL )+ )
             // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:4: ( UPPER_SYMBOL )+
@@ -1320,8 +1354,8 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:176:5: UPPER_SYMBOL
             	    {
-            	    UPPER_SYMBOL20=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_predicateName624); 
-            	     name = name + UPPER_SYMBOL20.getText(); 
+            	    UPPER_SYMBOL20=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_predicateName624);
+            	     name = name + UPPER_SYMBOL20.getText();
 
             	    }
             	    break;
@@ -1378,8 +1412,8 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:182:5: LOWER_SYMBOL
             	    {
-            	    LOWER_SYMBOL21=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_constant655); 
-            	     name = name + LOWER_SYMBOL21.getText(); 
+            	    LOWER_SYMBOL21=(Token)match(input,LOWER_SYMBOL,FOLLOW_LOWER_SYMBOL_in_constant655);
+            	     name = name + LOWER_SYMBOL21.getText();
 
             	    }
             	    break;
@@ -1396,7 +1430,7 @@ public class LogicLanguageParser extends Parser {
 
             }
 
-             object = new Constant(name); 
+             object = new Constant(name);
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -1437,8 +1471,8 @@ public class LogicLanguageParser extends Parser {
             	case 1 :
             	    // D:\\MyDocuments\\GitRepo\\Lois1\\src\\main\\java\\lois\\lab1\\parser\\LogicLanguage.g:188:5: UPPER_SYMBOL
             	    {
-            	    UPPER_SYMBOL22=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_variable686); 
-            	     name = name + UPPER_SYMBOL22.getText(); 
+            	    UPPER_SYMBOL22=(Token)match(input,UPPER_SYMBOL,FOLLOW_UPPER_SYMBOL_in_variable686);
+            	     name = name + UPPER_SYMBOL22.getText();
 
             	    }
             	    break;
@@ -1455,7 +1489,7 @@ public class LogicLanguageParser extends Parser {
 
             }
 
-             object = new Variable(name); 
+             object = new Variable(name);
         }
         catch (RecognitionException re) {
             reportError(re);
@@ -1528,7 +1562,7 @@ public class LogicLanguageParser extends Parser {
             return "()* loopback of 77:9: ( fact )*";
         }
     }
- 
+
 
     public static final BitSet FOLLOW_factList_in_base48 = new BitSet(new long[]{0x0000000000000022L});
     public static final BitSet FOLLOW_ruleList_in_base50 = new BitSet(new long[]{0x0000000000000002L});
