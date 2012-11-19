@@ -32,31 +32,70 @@ options {
 
     public static void main(String[] args) throws Exception {
     	
-		//String codeFile = args[0];
-    	String baseFile = "knowledgeBase/knowledgeBase.txt";
-    	//String goalFile = args[1];
-    	String goalFile = "knowledgeBase/goal.txt";
+        //String baseFile = args[0];
+        String baseFile = "knowledgeBase/knowledgeBase.txt";
+        //String goalFile = args[1];
+        String goalFile = "knowledgeBase/goal.txt";
 
-		//CharStream input = new ANTLRFileStream(args[0]);
-		LogicLanguageLexer lexer = new LogicLanguageLexer(new ANTLRFileStream(baseFile));
+        List<String> argumentsList = new ArrayList<String>();
+        for (String arg : args) {
+            argumentsList.add(arg);
+        }
+
+        boolean isShowTree = argumentsList.contains("-t");
+        boolean isInFile = argumentsList.contains("-f");
+
+   		//CharStream input = new ANTLRFileStream(args[0]);
+  		LogicLanguageLexer lexer = new LogicLanguageLexer(new ANTLRFileStream(baseFile));
         LogicLanguageParser parser = new LogicLanguageParser(new CommonTokenStream(lexer));
         parser.base();
-        
+
         lexer = new LogicLanguageLexer(new ANTLRFileStream(goalFile));
         parser = new LogicLanguageParser(new CommonTokenStream(lexer));
         parser.goal();
-        
+
         if (!errorList.isEmpty()) {
-        	System.out.println("Next errors was found: ");
-            
+          	System.out.println("Next errors was found: ");
+
             for (String error : errorList) {
-            	System.out.println(error);
+               	System.out.println(error);
             }
         } else {
-            System.out.println("Success!");
-            System.out.println(KnowledgeBase.getInstance().toString());
+            Solver solver = new Solver(KnowledgeBase.getInstance());
+            List<TreeNode> solutionList = solver.solve(goal);
+
+            for (TreeNode rootNode : solutionList) {
+                String resultTable = rootNode.getRelationTable().printRelationTable();
+                String tree = rootNode.printInferenceTree();
+
+                showResult(resultTable, tree, isInFile, isShowTree);
+            }
        	}
    	}
+
+    private static void showResult(
+        String resultTable, String tree, boolean isInFile, boolean isShowTree) throws IOException {
+
+        if (isInFile) {
+            File outputFile = new File("output.txt");
+            FileWriter writer = new FileWriter(outputFile);
+            writer.write("------------Result----------- \n\n");
+            writer.write(resultTable);
+            if (isShowTree) {
+                writer.write("\n\n\n");
+                writer.write("--------------Inference tree------------- \n\n");
+                writer.write(tree);
+            }
+            writer.close();
+        }
+        else {
+            System.out.println("--------------Result---------------\n");
+            System.out.println(resultTable);
+            if (isShowTree) {
+            System.out.println("\n---------------------Inference tree------------------ \n");
+            System.out.println(tree);
+        }
+    }
 
     public String getErrorHeader(RecognitionException e) {
         errorLine = e.line;

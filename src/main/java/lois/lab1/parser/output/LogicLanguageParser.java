@@ -16,6 +16,13 @@
 
     import org.antlr.runtime.*;
 
+    import java.io.File;
+    import java.io.FileNotFoundException;
+    import java.io.FileOutputStream;
+    import java.io.FileWriter;
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.io.OutputStream;
     import java.util.List;
 import java.util.ArrayList;
 
@@ -67,19 +74,13 @@ public class LogicLanguageParser extends Parser {
         	//String goalFile = args[1];
         	String goalFile = "knowledgeBase/goal.txt";
 
-            boolean isShowTree = false;
-            if ((args.length > 3 && (args[2].equals("-t") || args[3].equals("-t")))
-                || (args.length > 2 && args[2].equals("-t"))) {
-
-                isShowTree = true;
+            List<String> argumentsList = new ArrayList<String>();
+            for (String arg : args) {
+                argumentsList.add(arg);
             }
 
-            boolean isInFile = false;
-            if ((args.length > 3 && (args[2].equals("-f") || args[3].equals("-f")))
-                 || (args.length > 2 && args[2].equals("-f"))) {
-
-                 isInFile = true;
-            }
+            boolean isShowTree = argumentsList.contains("-t");
+            boolean isInFile = argumentsList.contains("-f");
 
     		//CharStream input = new ANTLRFileStream(args[0]);
     		LogicLanguageLexer lexer = new LogicLanguageLexer(new ANTLRFileStream(baseFile));
@@ -97,9 +98,6 @@ public class LogicLanguageParser extends Parser {
                 	System.out.println(error);
                 }
             } else {
-                System.out.println("Success!");
-                System.out.println(KnowledgeBase.getInstance().toString());
-
                 Solver solver = new Solver(KnowledgeBase.getInstance());
                 List<TreeNode> solutionList = solver.solve(goal);
 
@@ -112,13 +110,26 @@ public class LogicLanguageParser extends Parser {
            	}
        	}
 
-        private static void showResult(String resultTable, String tree, boolean isInFile, boolean isShowTree) {
-            if (isInFile) {
+        private static void showResult(
+            String resultTable, String tree, boolean isInFile, boolean isShowTree) throws IOException {
 
+            if (isInFile) {
+                File outputFile = new File("output.txt");
+                FileWriter writer = new FileWriter(outputFile);
+                writer.write("------------Result----------- \n\n");
+                writer.write(resultTable);
+                if (isShowTree) {
+                    writer.write("\n\n\n");
+                    writer.write("--------------Inference tree------------- \n\n");
+                    writer.write(tree);
+                }
+                writer.close();
             }
             else {
+                System.out.println("--------------Result---------------\n");
                 System.out.println(resultTable);
                 if (isShowTree) {
+                    System.out.println("\n---------------------Inference tree------------------ \n");
                     System.out.println(tree);
                 }
             }
