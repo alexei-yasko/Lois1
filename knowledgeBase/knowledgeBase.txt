@@ -24,4 +24,4 @@ N(f, g).
 L(h, f).
 L(h, g).
 T(X, Y) <- P(X, Z); Q(Z,Y).
-T(Y, Y) <- R(a, Y).
+T(Y, Y) <- R(Y, Y).

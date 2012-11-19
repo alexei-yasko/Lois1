@@ -57,7 +57,6 @@ public class TreeNode {
         }
 
         return relationTable;
-        //return null;
     }
 
     /**
@@ -125,7 +124,7 @@ public class TreeNode {
         for (AtomSign atomSign : nodePredicate.getArgumentList()) {
 
             if (atomSign.getType() == AtomSignType.VAR) {
-                variableList.add((Variable) atomSign);
+                variableList.add(atomSign);
             }
         }
 

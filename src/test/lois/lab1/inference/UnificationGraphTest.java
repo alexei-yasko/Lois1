@@ -19,7 +19,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class UnificationGraphTest {
 
     @Test
-    public void testUnificationGraphIvashSample() {
+    public void testUnificationGraphUniverSample() {
 
         Predicate predicate1 = new Predicate("P", Arrays.asList(
             new Variable("X"), new Constant("c"), new Constant("a")
