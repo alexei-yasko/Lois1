@@ -23,7 +23,12 @@ public class RelationTableColumn {
     }
 
     public AtomSign getColumnValue(int index) {
-        return column.getSecond().get(index);
+        if (index < column.getSecond().size()) {
+            return column.getSecond().get(index);
+        }
+        else {
+            return null;
+        }
     }
 
     public List<AtomSign> getColumnValueList() {
@@ -32,10 +37,6 @@ public class RelationTableColumn {
 
     public AtomSign getColumnTitle() {
         return column.getFirst();
-    }
-
-    public void setColumnTitle(AtomSign title) {
-        column = new Pair<AtomSign,List<AtomSign>>(title, column.getSecond());
     }
 
     public void addColumnValueList(List<AtomSign> values) {

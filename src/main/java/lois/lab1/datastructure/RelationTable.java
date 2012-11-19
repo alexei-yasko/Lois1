@@ -64,7 +64,7 @@ public class RelationTable {
             }
         }
 
-        return resultRelationTable;
+        return removeRepeatingRow(resultRelationTable);
     }
 
     public RelationTable union(RelationTable that) {
@@ -124,13 +124,6 @@ public class RelationTable {
         for (int i = 0; i < getTitleList().size(); i++) {
             RelationTableColumn column = getColumns().get(i);
             column.addColumnValue(values.get(i));
-        }
-    }
-
-    public void addRowList(List<List<AtomSign>> rowList) {
-
-        for (List<AtomSign> row : rowList) {
-            addRow(row);
         }
     }
 
@@ -194,18 +187,22 @@ public class RelationTable {
         return titleList;
     }
 
-    public void removeColumn(AtomSign title) {
-        for (int i = 0; i < columns.size(); i++) {
-
-            if (columns.get(i).getColumnTitle().equals(title)) {
-                columns.remove(i);
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return columns.toString();
+    }
+
+    private RelationTable removeRepeatingRow(RelationTable relationTable) {
+        RelationTable newRelationTable = new RelationTable(relationTable.getTitleList());
+
+        for (List<AtomSign> row : relationTable.getAllRows()) {
+
+            if (!newRelationTable.getAllRows().contains(row)) {
+                newRelationTable.addRow(row);
+            }
+        }
+
+        return newRelationTable;
     }
 
     private Pair<List<AtomSign>, List<AtomSign>> joinRow(
