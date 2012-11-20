@@ -3,6 +3,8 @@ package lois.lab1.datastructure;
 import java.util.Arrays;
 
 /**
+ * Similarity relation.
+ *
  * @author Svet
  */
 public class SimilarityRelation extends Predicate {

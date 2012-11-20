@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Rule.
+ *
  * @author Svet
  */
 public class Rule {

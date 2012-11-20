@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Node of the inference tree.
+ *
  * @author Q-YAA
  */
 public class TreeNode {
@@ -29,6 +31,11 @@ public class TreeNode {
         this.nodePredicate = nodePredicate;
     }
 
+    /**
+     * Calculate relation table of the node from child relation table.
+     *
+     * @return result relation table.
+     */
     public RelationTable calculateRelationTable() {
         List<TreeNode> resultChildList = getChildNodeList(false);
         List<TreeNode> similarChildList = getChildNodeList(true);
@@ -90,6 +97,11 @@ public class TreeNode {
         return nodePredicate;
     }
 
+    /**
+     * Returns arguments that is variable.
+     *
+     * @return list of variable arguments
+     */
     public List<AtomSign> getNodePredicateVariableList() {
         List<AtomSign> variableList = new ArrayList<AtomSign>();
 
@@ -103,6 +115,13 @@ public class TreeNode {
         return variableList;
     }
 
+    /**
+     * Returns child node list.
+     *
+     * @param isForSimilar parameter, that shows return similarity child, or rule reason child.
+     * If true, that returns similarity child, if false return rule reason child.
+     * @return list of child nodes
+     */
     private List<TreeNode> getChildNodeList(boolean isForSimilar) {
         List<TreeNode> resultNodeList = new ArrayList<TreeNode>();
 
@@ -173,6 +192,15 @@ public class TreeNode {
         return resultRelationTable.projectTo(getNodePredicateVariableList());
     }
 
+    /**
+     * Function that process relation table of the similar node and relation table of the rule reason node.
+     * This function check if values in rule reason relation table similar to the values in the similar node relation table.
+     *
+     * @param resultsTable relation table of the rule reasons
+     * @param similarTable relation table of the similar node
+     * @param similarityName name of the similarity relation
+     * @return new relation table
+     */
     private RelationTable processSimilarResults(RelationTable resultsTable, RelationTable similarTable, String similarityName) {
 
         RelationTable processedTable = new RelationTable(resultsTable.getTitleList());
@@ -191,6 +219,15 @@ public class TreeNode {
         return processedTable;
     }
 
+    /**
+     * Function that process row of the rule reason relation table and similar node relation table.
+     * Even if one value from firs row doesn't similar to value in second row, returns null.
+     *
+     * @param resultRow row of the rule reason relation table
+     * @param similarRow row of the similar node relation table
+     * @param similarityName name of the similarity relation
+     * @return result row or null
+     */
     private List<AtomSign> processSimilarRow(List<AtomSign> resultRow, List<AtomSign> similarRow, String similarityName) {
         boolean isSimilar = true;
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Column of the relation table.
+ *
  * @author Q-YAA
  */
 public class RelationTableColumn {

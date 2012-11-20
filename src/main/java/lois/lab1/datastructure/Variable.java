@@ -1,6 +1,8 @@
 package lois.lab1.datastructure;
 
 /**
+ * Variable.
+ *
  * @author Svet
  */
 public class Variable extends AtomSign {

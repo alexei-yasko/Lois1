@@ -36,22 +36,13 @@ public class RelationTable {
     public String printRelationTable() {
         StringBuilder result = new StringBuilder();
 
-        List<AtomSign> titleList = getTitleList();
-        StringBuilder titleString = new StringBuilder();
-        StringBuilder separatorString = new StringBuilder();
-        for (int i = 0; i < titleList.size(); i++) {
-            titleString.append(" ").append(titleList.get(i).getSign()).append(" ");
-            separatorString.append("---");
-        }
-        result.append(titleString).append("\n");
-        result.append(separatorString).append("\n");
+        for (RelationTableColumn column : getColumns()) {
+            result.append(column.getColumnTitle().getSign()).append(" = ");
 
-        for (List<AtomSign> row : getAllRows()) {
-            StringBuilder rowString = new StringBuilder();
-            for (AtomSign element : row) {
-                rowString.append(" ").append(element.getSign()).append(" ");
+            for (AtomSign value : column.getColumnValueList()) {
+                result.append(value.getSign()).append("; ");
             }
-            result.append(rowString).append("\n");
+            result.append("\n");
         }
 
         return result.toString();
