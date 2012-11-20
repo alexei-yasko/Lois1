@@ -310,9 +310,15 @@ public class KnowledgeBase {
         return resultList;
     }
 
+    /**
+     * Verify knowledge base.
+     *
+     * @return list of the found errors (empty list if errors not found)
+     */
     public List<String> verifyKnowledgeBase() {
         List<String> errorList = new ArrayList<String>();
         errorList.addAll(checkPredicateList(predicateList));
+        errorList.addAll(checkForErrors(knowledgeBase));
 
         return errorList;
     }
@@ -359,4 +365,65 @@ public class KnowledgeBase {
 
         return errorList;
     }
+
+    private List<String> checkForErrors(KnowledgeBase knowledgeBase) {
+        List<String> errorList = new ArrayList<String>();
+
+        for (Predicate predicate : knowledgeBase.getPredicateList()) {
+
+            if (predicate == null) {
+                errorList.add("Base verification error! Predicate must not be null");
+                continue;
+            }
+
+            for (AtomSign argument : predicate.getArgumentList()) {
+                if (argument == null) {
+                    errorList.add("Base verification error! Predicate argument must not be null");
+                }
+            }
+        }
+
+        if (!errorList.isEmpty()) {
+            return errorList;
+        }
+
+        for (Rule rule : knowledgeBase.getRuleList()) {
+
+            if (rule == null) {
+                errorList.add("Base verification error! Rule must not be null");
+                continue;
+            }
+
+            if (rule.getConsequent() == null) {
+                errorList.add("Base verification error! Rule consequent must not be null");
+            }
+
+            for (AtomSign reason : rule.getReason()) {
+                if (reason == null) {
+                    errorList.add("Base verification error! Rule reason must not be null");
+                }
+            }
+        }
+
+        if (!errorList.isEmpty()) {
+            return errorList;
+        }
+
+        for (SimilarityRelation similarityRelation : knowledgeBase.getSimilarityRelationList()) {
+
+            if (similarityRelation == null) {
+                errorList.add("Base verification error! Similarity relation must not be null");
+                continue;
+            }
+
+            for (AtomSign argument : similarityRelation.getArgumentList()) {
+                if (argument == null) {
+                    errorList.add("Base verification error! Similarity relation argument must not be null");
+                }
+            }
+        }
+
+        return errorList;
+    }
 }
+

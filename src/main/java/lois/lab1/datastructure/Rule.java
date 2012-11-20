@@ -35,7 +35,7 @@ public class Rule {
 
         for (Predicate predicate : arguments) {
 
-            if (predicate.getType() != AtomSignType.PREDICATE) {
+            if (predicate != null && predicate.getType() != AtomSignType.PREDICATE) {
                 throw new IllegalStateException("Bad arguments for the rule! Arguments must be the PREDICATE type.");
             }
         }
