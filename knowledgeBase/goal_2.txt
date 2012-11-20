@@ -1,1 +1,1 @@
-HASLIVE(X)
+HASLIVE(W)

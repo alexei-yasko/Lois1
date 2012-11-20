@@ -41,7 +41,7 @@ public class Solver {
 
             rootNode.calculateRelationTable();
             resultList.add(rootNode);
-            //System.out.println(rootNode.printInferenceTree());
+            System.out.println(rootNode.printInferenceTree());
         }
 
         return resultList;
