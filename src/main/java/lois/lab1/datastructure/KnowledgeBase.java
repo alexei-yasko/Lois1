@@ -310,6 +310,13 @@ public class KnowledgeBase {
         return resultList;
     }
 
+    public List<String> verifyKnowledgeBase() {
+        List<String> errorList = new ArrayList<String>();
+        errorList.addAll(checkPredicateList(predicateList));
+
+        return errorList;
+    }
+
     public List<Predicate> getPredicateList() {
         return predicateList;
     }
@@ -329,5 +336,27 @@ public class KnowledgeBase {
             ", similarityRelationList=" + similarityRelationList +
             ", ruleList=" + ruleList +
             '}';
+    }
+
+    /**
+     * Check quantity of the arguments in the predicate with the same name.
+     *
+     * @return List list of the found errors (empty list if errors not found)
+     */
+    private List<String> checkPredicateList(List<Predicate> predicateList) {
+        List<String> errorList = new ArrayList<String>();
+
+        for (Predicate firstPredicate : predicateList) {
+            for (Predicate secondPredicate : predicateList) {
+
+                if (firstPredicate.getSign().equals(secondPredicate.getSign())
+                    && firstPredicate.getArgumentList().size() != secondPredicate.getArgumentList().size()) {
+
+                    errorList.add("Incompatible predicates: " + firstPredicate + " and " + secondPredicate);
+                }
+            }
+        }
+
+        return errorList;
     }
 }

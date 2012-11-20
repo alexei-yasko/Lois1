@@ -91,6 +91,8 @@ public class LogicLanguageParser extends Parser {
             parser = new LogicLanguageParser(new CommonTokenStream(lexer));
             parser.goal();
 
+            errorList.addAll(KnowledgeBase.getInstance().verifyKnowledgeBase());
+
             if (!errorList.isEmpty()) {
             	System.out.println("Next errors was found: ");
 
