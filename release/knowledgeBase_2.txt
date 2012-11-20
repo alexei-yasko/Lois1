@@ -2,6 +2,7 @@ PLANET(upiter).
 PLANET(earth).
 
 TURNAROUND(upiter, europe).
+TURNAROUND(earth, luna).
 
 PHASAIR(earth).
 PHASWATER(earth).
