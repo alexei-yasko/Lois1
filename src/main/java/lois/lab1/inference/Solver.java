@@ -36,18 +36,18 @@ public class Solver {
 
         for (Predicate predicate : goal.getGoalTermList()) {
 
-            TreeNode rootNode =
-                solveRec(new TreeNode(TreeNode.OR_TYPE, null, predicate), predicate, 0, new ArrayList<String>());
+            TreeNode rootNode = solveRec(new TreeNode(TreeNode.OR_TYPE, null, predicate),
+                predicate, 0, new ArrayList<Pair<String, String>>());
 
             rootNode.calculateRelationTable();
             resultList.add(rootNode);
-            System.out.println(rootNode.printInferenceTree());
+            //System.out.println(rootNode.printInferenceTree());
         }
 
         return resultList;
     }
 
-    public TreeNode solveRec(TreeNode currentNode, Predicate predicate, int level, List<String> usedPredicates) {
+    public TreeNode solveRec(TreeNode currentNode, Predicate predicate, int level, List<Pair<String, String>> usedPredicates) {
 
         // find contradictions
         List<Predicate> contradictionList = knowledgeBase.findLogicallySameFacts(predicate);
@@ -58,10 +58,10 @@ public class Solver {
         }
 
         // prevents recursion
-        if (usedPredicates.contains(predicate.getSign())) {
+        if (usedPredicates.contains(new Pair<String, String>(predicate.getSign(), currentNode.getSimilarityName()))) {
             return currentNode;
         }
-        usedPredicates.add(predicate.getSign());
+        usedPredicates.add(new Pair<String, String>(predicate.getSign(), currentNode.getSimilarityName()));
 
         // apply rules
         List<Rule> ruleList = knowledgeBase.findRuleForPredicate(predicate);
@@ -81,9 +81,13 @@ public class Solver {
             for (Predicate reason : unifiedRule.getReason()) {
                 TreeNode reasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedNode, reason);
                 unifiedNode.addChild(reasonNode);
-                usedPredicates.add(unifiedRule.getConsequent().getSign());
+
+                usedPredicates.add(
+                    new Pair<String, String>(unifiedRule.getConsequent().getSign(), unifiedNode.getSimilarityName()));
+
                 solveRec(reasonNode, reason, level + 1, usedPredicates);
-                usedPredicates.remove(unifiedRule.getConsequent().getSign());
+                usedPredicates.remove(
+                    new Pair<String, String>(unifiedRule.getConsequent().getSign(), unifiedNode.getSimilarityName()));
             }
         }
 
@@ -114,9 +118,17 @@ public class Solver {
                 for (Predicate similarReason : unifiedSimilarRule.getReason()) {
                     TreeNode similarReasonNode = new TreeNode(TreeNode.AND_TYPE, unifiedSimilarNode, similarReason);
                     unifiedSimilarNode.addChild(similarReasonNode);
-                    usedPredicates.add(unifiedSimilarRule.getConsequent().getSign());
+
+                    usedPredicates.add(
+                        new Pair<String, String>(
+                            unifiedSimilarRule.getConsequent().getSign(), unifiedSimilarNode.getSimilarityName()));
+
                     solveRec(similarReasonNode, similarReason, level + 1, usedPredicates);
-                    usedPredicates.remove(unifiedSimilarRule.getConsequent().getSign());
+
+                    usedPredicates.remove(new Pair<String, String>(
+                        unifiedSimilarRule.getConsequent().getSign(),
+                        unifiedSimilarNode.getSimilarityName()));
+
                 }
 
                 // append similar predicate
@@ -128,7 +140,7 @@ public class Solver {
             }
         }
 
-        usedPredicates.remove(predicate.getSign());
+        usedPredicates.remove(new Pair<String, String>(predicate.getSign(), currentNode.getSimilarityName()));
         return currentNode;
     }
 

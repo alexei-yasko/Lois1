@@ -41,14 +41,14 @@ public class TreeNode {
         List<TreeNode> similarChildList = getChildNodeList(true);
 
         if (similarChildList.isEmpty()) {
-            relationTable = calculateRelationTable(resultChildList);
+            relationTable = relationTable.union(calculateRelationTable(resultChildList));
         }
         else if (resultChildList.isEmpty()) {
-            relationTable = calculateRelationTable(similarChildList);
+            relationTable = relationTable.union(calculateRelationTable(similarChildList));
         }
         else {
-            relationTable = processSimilarResults(
-                calculateRelationTable(resultChildList), calculateRelationTable(similarChildList), getUsedSimilarityName());
+            relationTable = relationTable.union(processSimilarResults(
+                calculateRelationTable(resultChildList), calculateRelationTable(similarChildList), getUsedSimilarityName()));
         }
 
         return relationTable;

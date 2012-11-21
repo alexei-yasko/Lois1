@@ -1,0 +1,23 @@
+PLANET(upiter).
+PLANET(earth).
+
+TURNAROUND(upiter, europe).
+TURNAROUND(earth, luna).
+
+HASAIR(earth).
+HASWATER(earth).
+
+HASWATER(europe).
+HASOXYGEN(europe).
+
+s(earth, europe).
+s(PLANET, SATTELLITE).
+s(HASAIR, HASAIR).
+s(HASWATER, HASWATER).
+s(HASLIFE, HASLIFE).
+
+SATTELLITE(X) <- PLANET(Y); TURNAROUND(Y, X).
+
+HASAIR(X) <- HASOXYGEN(X).
+
+HASLIFE(X) <- PLANET(X); HASAIR(X); HASWATER(X).

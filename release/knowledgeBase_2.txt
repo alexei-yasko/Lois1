@@ -10,7 +10,7 @@ PHASWATER(earth).
 SHASOXYGEN(europe).
 SHASWATER(europe).
 
-s(earth, europe).
+//s(earth, europe).
 s(PLANET, SATTELLITE).
 s(PHASAIR, SHASAIR).
 s(PHASWATER, SHASWATER).
