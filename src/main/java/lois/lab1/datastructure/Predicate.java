@@ -35,18 +35,6 @@ public class Predicate extends AtomSign {
         return arguments;
     }
 
-    public List<AtomSign> getVariableArgumentList() {
-        List<AtomSign> variableArgumentList = new ArrayList<AtomSign>();
-        for (AtomSign argument : arguments) {
-
-            if (argument.getType() == AtomSignType.VAR) {
-                variableArgumentList.add((Variable) argument);
-            }
-        }
-
-        return variableArgumentList;
-    }
-
     /**
      * Determines if the predicate logically equivalent to the other.
      *
