@@ -269,29 +269,6 @@ public class KnowledgeBase {
     }
 
     /**
-     * Creates similar rule for the every rule and every similarity relation.
-     *
-     * @return pair list of the similar rule.
-     *         First element in the pair - similar rule, second - name of the similarity relation.
-     */
-    public List<Pair<Rule, String>> createAllSimilarRule() {
-        List<Pair<Rule, String>> similarityRuleList = new ArrayList<Pair<Rule, String>>();
-
-        for (String similarityRelationName : getAllNameOfSimilarityRelations()) {
-
-            for (Rule rule : getRuleList()) {
-                Rule similarRule = createSimilarRule(rule, similarityRelationName);
-
-                if (similarRule != null) {
-                    similarityRuleList.add(new Pair<Rule, String>(similarRule, similarityRelationName));
-                }
-            }
-        }
-
-        return similarityRuleList;
-    }
-
-    /**
      * Find all rule from the knowledge base where the given predicate it's consequent.
      *
      * @param predicate predicate to find rule
